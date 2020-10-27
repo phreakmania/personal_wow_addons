@@ -1,0 +1,16 @@
+## Interface:60000
+## Title: |cffFF6600Addon|r Manager
+## Notes: WoW Addon Manager
+## Version: 1.3
+## DefaultState: enabled
+## Author: Sephìra @ Mal'Ganis (EU)
+
+am.lua
+english.lua
+german.lua
+
+
+
+
+
+

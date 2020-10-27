@@ -1,0 +1,8 @@
+## Interface: 90001
+## Title: BetterWardrobe_Tooltips (V2.3.1)
+## Version: V2.3.1
+## Game Version: 9.0.1
+## Author: SLOKnightfall
+## Notes: Loader addon to display tooltips
+
+BetterWardrobe_Tooltips.lua

@@ -1,0 +1,11 @@
+## Title: !NoFlash |cff224477
+## Notes: Simple addon which should remove the flashing of the wow icon on your taskbar
+##
+## Interface: 80200
+##
+## Version: 1.2.0
+## Author: Xalcon
+## SavedVariables: NoFlashDB
+##
+
+!NoFlash.lua

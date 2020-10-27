@@ -1,0 +1,1014 @@
+﻿---------------------------
+ChangeLogs:
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0161)
+Game Version: 9.0.1
+Release Date: 29/10/2020
+
+## Quest-Tracker
+	- Should now remove "Popup" quests when you click the box.
+	
+	
+
+
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0161)
+Game Version: 9.0.1
+Release Date: 25/10/2020
+
+
+## Quest 
+	- fixed (bitbucket) issue #124
+
+
+## Information
+	-- command line now should be right with how there coded with /ema-info
+		-- show is now a toggle.
+
+
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0160)
+Game Version: 9.0.1
+Release Date: 23/10/2020
+
+## Quest-Tracker
+	-- More API changes Fixed!
+
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0159)
+Game Version: 9.0.1
+Release Date: 17/10/2020
+
+## Disaply-Team	
+	-- Can now show PLayerName on the HeathBars.
+	-- Can now Freeze the Portrait Frame
+	-- if a Character can not be found now sets a "Talking ?"
+	-- if Not Using Trufigcd  in EMA it show noloner change the settings of the addon.
+	
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0158)
+Game Version: 9.0.1
+Release Date: 17/10/2020
+
+## Team
+	- Fixed API change for BN Friends.
+	
+## Quest
+	- Fixed more Quest-API.
+
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0157)
+Game Version: 9.0.1
+Release Date: 15/10/2020
+
+# Quest
+	- If Master Auto Shareing Quest is on it should work again.
+	- ShareAll should work again.
+
+# Quest-Tracker
+	- Fixed Disaply Problem with German Clients (bitbicket #114 )
+
+
+---------------------------
+EMA Version: v9.0.1-Release-v3.0(0156)
+Game Version: 9.0.1
+Release Date: 15/10/2020
+
+# Display-Team
+	-- Fixed an Error if you login with a new Trufigcd Profile
+
+---------------------------
+
+EMA Version: v9.0.0-Release-v3.0(0155)
+Game Version: 9.0.1
+Release Date: 15/10/2020
+
+##	Quest
+	-- Removed some debug Code
+	
+## Quest-Tracker
+	-- Removed some Debug Code
+
+
+
+---------------------------
+
+EMA Version: v9.0.0-Release-v3.0(0154)
+Game Version: 9.0.1
+Release Date: 14/10/2020
+
+## Quest-Tracker
+	-- Fixed a lua Error on some world quests
+	
+## Quest
+	-- fixed a Gossip if talking to a npc that has a vender GUI
+	
+## information
+	-- fixed the API Should now work
+	
+	
+	
+---------------------------
+
+EMA Version: v9.0.0-Release-v3.0(0146-0153)
+Game Version: 9.0.0
+Release Date: 13/10/2020
+
+## 9.0 Initial release
+	-- fixed wow-api chnages.
+
+### Known issues.
+
+##Display-Team
+	--added support to add the party frame from trugcd addon to EMA's.
+
+
+## Toon
+	-- CC warn, Now shows the spell that was casted on the player
+	
+	
+## ItemBar
+	-- Should Now work with Spells and Toys.
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.5(0146)
+Game Version: 8.3.0
+Release Date: 20/07/2020
+
+## Information
+	-- Trying to fix a bug i broke the *.DB so all settings got reset in this module ( sorry :( )
+	
+	-- Echoes of Ny'alotha sometimes do not show on a team member and blocks them from being showen in the blizzard UI. ( Issue #107 )
+		- DEV NOTE: This has been making a problem with EMA information generating the Currency List i added a hotfix to stop this blocking the addon 
+		- please to no report report it when a character Shows 0 Echoes of Ny'alotha 
+		-this is not a EMA problem this a blizzard problem and is well known. A reclient load or deleteing you Cache will fix and they should show again.
+		
+
+
+
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.5(0145)
+Game Version: 8.3.0
+Release Date: 18/07/2020
+
+##Ebonys Utilities
+	-- Fixed issue #106
+
+
+
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.5(0144)
+Game Version: 8.3.0
+Release Date: 18/07/2020
+
+##Follow
+	- Fixed a bug with warn pvp follow not getting truned off.
+
+
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.5(0143)
+Game Version: 8.3.0
+Release Date: 17/07/2020
+
+## Information
+	-- Changed Command line to [info] from [information]
+	-- Added Echoes of Nyalotha
+	-- Added a chat !Triggers that work in party/guild/raid
+		- !emahelp = Shows all the Triggers
+		- !gold = Tells you how much gold you have on your team
+		- !item  = [ItemName] = shows how many of a item you have in your team.
+		- !durability or !durr = Shows your teams Durability.
+		- !keys = Shows your KeyStones
+		- !Bagspace = shows your Teams Bagspace.
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.4(0142)
+Game Version: 8.3.0
+Release Date: 16/07/2020
+
+## Toon
+	- Fixed a bug with Toggle WarMode 
+	
+# item-Bar
+	-- Removed Add Add Satche ls Items To Bar due to a Big API change
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.4(0140/1)
+Game Version: 8.3.0
+Release Date: 30/05/2020
+
+## Toon
+	- Updated Summon API
+	- Durability Warning will not warn ( "(ind)%" )
+
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.4(0139)
+Game Version: 8.3.0
+Release Date: 07/02/2020
+
+## Bank
+	- Fixed a bug that would not put normal items in the bank
+	
+## information
+	- Fixed  Issue #96
+
+
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.4(0138)
+Game Version: 8.3.0
+Release Date: 02/02/2020
+
+## Toon
+	- Added Auto Accept Party Sync Requests.
+	
+
+---------------------------
+
+EMA Version: v8.3.0-Release-v2.3(0137)
+Game Version: 8.3.0
+Release Date: 01/02/2020
+
+## Core
+	- Updated ToC to 8.3.0
+	
+## Bank
+	- New Module Bank! 
+	- Store more junk in the bank!
+	
+##information
+	-- WIP: Lots of new code in here sorry!
+	-- added 8.3
+		- Coalescing Visions
+		- Corrupted Mementos
+	
+
+---------------------------
+
+EMA Version: v8.2.2-Release-v2.2(0136)
+Game Version: 8.2.5
+Release Date: 03/10/2019
+
+## Core
+	- Updated Toc to 8.2.5
+
+## Team
+	-- Fixed Issue #20 Again!
+		- Dev Note: Fixed The Lua Error But Did Not Fix The Friend System. ( Is a MixInTable Now)
+
+
+---------------------------
+
+EMA Version: v8.2.0-Release-v2.2(0135)
+Game Version: 8.2.0
+Release Date: 24/9/2019
+
+## Trade
+	-- Fixed A Bug Where The Groups On Boe And Crafting Reagents Was Not Getting Send To Other Team Members
+
+## Team
+	-- Fixed Issue Classic #20 (Changed API )
+
+---------------------------
+
+EMA Version: v8.2.0-Release-v2.2(0134)
+Game Version: 8.2.0
+Release Date: 14/9/2019
+
+# Trade, Guild, Purchase, Mail
+	- Fixed a Global Error where it was not removing the item from the right Selected Item
+	
+
+
+---------------------------
+
+
+EMA Version: v8.2.0-Release-v2.2(0133)
+Game Version: 8.2.0
+Release Date: 3/8/2019
+
+# Disaply Team
+	- Fixed a SetPoint Bug
+
+
+
+---------------------------
+
+EMA Version: v8.2.0-Release-v2.2(0132)
+Game Version: 8.2.0
+Release Date: 31/7/2019
+
+# Core
+	- Updated Ace3 to r1214
+
+# Item-Use
+	- Fixed Command Line Help Files. issue #83
+	
+# Information
+	- Fixed a SetPoint Bug
+
+---------------------------
+
+EMA Version: v8.2.0-Release-v2.2(0131)
+Game Version: 8.2.0
+Release Date: 27/7/2019
+
+## Trade, Vender, Purchase, Mail, Guild
+	-- You can Now Use Shift+Click to add the Item to the EditBox. 
+	(Dev Note: The Ui Is Protected On Normal Click And Could Not Use Items )
+
+## Trade
+	-- Holding "Shift Key" will not trade items to master. (If For Some Reason U Did Not Want To Use Ema-Trade)
+
+## Communications
+	-- Now Uses Its Own Prefix And Not Jamba's
+	-- Changed LayOut
+	-- Removed Boost Communications ( As Chat Chatthrottlelib Now Uses The Same Settings )
+	
+## Currency
+	-- Added 8.2 Currencys
+		- Prismatic Manapearl
+
+---------------------------
+
+EMA Version: v8.2.0-Release-v2.1(0127)
+Game Version: 8.2.0
+Release Date: 26/6/2019
+
+## Core
+	- Updated Ace3
+	- Updated SharedMediaWidgets
+	- Updated LibSharedMedia-3.0
+	
+
+
+## Message
+	- Fixed 8.2 Sound changes
+		- Added new sound EMA Warning (from jamba-extras)
+		- Had to added blizzard own Raid warning Sound for libsheardmedia to work. (hacky)
+---------------------------
+
+EMA Version: v8.1.5-Release-v2.1(0126)
+Game Version: 8.1.5
+Release Date: 8/6/2019
+
+## Core
+	- Updated Ace3
+	- Updated LibSharedMedia-3.0
+
+## Item-Use
+	- Will now Disaply Item count to 9999 before it * out Issue #20
+	
+## Interaction
+	- Fixed a Bug not telling Team when you loot a Epic/Rare BoE items
+
+## Toon
+	- Fixed Issue #70
+
+ 	
+---------------------------
+
+EMA Version: v8.1.5-Release-v2.0(0121)
+Game Version: 8.1.5
+Release Date: 16/4/2019
+
+## information (curr)
+	- Fixed a bug with it still reporting to use old Command lines "help"
+
+---------------------------
+
+EMA Version: v8.1.5-Release-v2.0(0120)
+Game Version: 8.1.5
+Release Date: 13/4/2019
+
+EMA V2 
+
+## Core
+	- Fixed ToC files to support 8.1.5 
+		-- Dev Note: This Was Hotfixed Into The Game As There Was No Toc Change At The Start Of The Patch Grrrr!
+	- Fixed Some Text Placements
+	- Command Line v2
+		--* /EMA Config To Now Open The Config!
+		--* Now Shows A "Help" If The Command Is Wrong Or You Added A Unknown Command In.
+		--** Can Not Open Config In combat (As it can not draw the GUI when in combat)
+	- New Year, A New Year to add to copyright!
+
+## Team
+	-- Remove All Team Command Should Now Work Again.
+
+## Vender
+	- Should Now Work With The TradeSkill Master 4 UI Issue#26
+	- Now Sells One Item At A Item Then Trying To Loop The Bag!
+			-- Fixed Items gettting stuck/selling very very slow when in a stack.
+	- Fixed The Sell Items, And Gold Prices In Chat
+	- Added A Global Sell List, This Works Across "All" Characters
+		-- Dev Note: Use "/EMA-purchase Sell" To Copy From The Local List To The Global List	
+	- Added Support To Sell or Destroy Already Known Toys and Mounts
+		
+## Purchase
+	- Updated GUI
+	- Added A Global Sell List, This Works Across "All" Characters
+		-- Dev Note: Use "/EMA-purchase copy" To Copy From The Local List To The Global List
+	
+	
+## Trade
+	- Added A Global Sell List, This Works Across "All" Characters
+		-- Dev Note: Use "/EMA-trade copy" To Copy From The Local List To The Global List
+	- fixed issue #61
+
+## Mail
+	- Added A Global Sell List, This Works Across "All" Characters
+		-- Dev Note: Use "/EMA-Mail copy" To Copy From The Local List To The Global List
+	- Should Send Gold After its send all items issue #52
+	- Fixed issue #59
+	
+
+## GuildBank
+	- Added A Global Sell List, This Works Across "All" Characters
+		-- Dev Note: Use "/EMA-Sell copy" To Copy From The Local List To The Global List
+	- Fixed Bug #65
+		
+## Item-Use
+	- Should Remove Quest Items On Its Own From The Item Bar Again
+
+## Currency
+	- Added 8.1 Currency's
+		-- 7th Legion Service
+		-- Honorbound Service
+		-- Titan Residuum
+
+## Interaction
+	-- Added Tells The Team If They Looted A BoE Mount!
+	
+---------------------------
+
+EMA Version: v8.1.0-Release(0108)
+Game Version: 8.1.0
+Release Date: 12/12/2018
+
+## Toon
+	-- Fixed some API changes in WarMode that was changed in patch 8.1
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0107)
+Game Version: 8.0.1
+Release Date: 02/12/2018
+
+## Mail
+	# Added Support to Mail Gold! 
+	# Fix The Mail Page getting stuck on the Outgoing Mail when Nothing to send!
+	# Postal addon should nolonger clear the last character you Mailed
+
+
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0106)
+Game Version: 8.0.1
+Release Date: 17/11/2018
+
+## Interaction
+	# Loot
+		- Should Close Loot Window If There is no Items to Loot! issue #13
+	#Taxi
+		- Taxi service changed to try and deal better with the Newer FightMap with the Same Point NAME! issue #38
+		
+## Quest
+	- Fixed a bug Lua Error on quest when the clone does not have more then one item to pick issue #17
+
+## Item-Bar
+	- Fixed A Bug Where It Was Clearing Items In The Players Bag! issue #46
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0103)
+Game Version: 8.0.1
+Release Date: 23/10/2018
+
+
+## Interaction
+	-- Fixed A bug where two FightPoints on the map has the same "name" issue #38
+	
+## Toon
+	-- Should Nolonger Spam the Team Saying WarMode Can Only Be Trun Off in Capital Citys
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0102)
+Game Version: 8.0.1
+Release Date: 30/09/2018
+
+## Guild
+	- Added Enhancement "deposited X gold to the guild bank" message issue #42 ( B:0102 )
+	
+
+## Toon
+	- Repair
+		-- Using Blizzard GoldStings( B:0102 )
+
+## Mail
+	-- No Longer Keeps Curser in MailNameEditBox Issue #40 ( B:0102 )
+
+## Currency
+	-- Currency List Sorted Better issue #35 ( B:0102 )
+		
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0099)
+Game Version: 8.0.1
+Release Date: 10/09/2018
+
+## Group/tag
+	-- CommandLine /EMA AddCharacterToGroup <name> <Group> Should Do Something Now
+
+## 	isboxer
+	-- will now update teamlist on login!
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0098)
+Game Version: 8.0.1
+Release Date: 10/09/2018
+
+## Trade
+	-- Fixed issues #32
+	
+## ItemUse
+	-- Should not remove Non-Quest items from the bar!	
+	
+## Mail
+	-- Holding Down Shift Key  when you open the MailBox Will Stop You Sending Mail!
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0097)
+Game Version: 8.0.1
+Release Date: 09/09/2018
+
+## Follow/isboxer
+	-- The old jamba comamnds /jamba-follow should work again with EMA
+
+## Guild 
+	-- Fix a bug where the BlackList Option was not Setting on the GUI Right
+
+## Mail
+	-- Fix a bug where the BlackList Option was not Setting on the GUI Right
+	-- Should Now Send The Right Items To The Right Toon
+		-Developer Note: The Goblins Really Massed Up The Itemsmatic7se So We Added More Booom!!!
+	-- Will Not Try And Send More Then Attachments_Max_Send( 12 Items ) At A Time!
+	-- Does Not Try And Send Mail Again Before The The 1st Mail Is Send.
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0096)
+Game Version: 8.0.1
+Release Date: 08/09/2018
+
+## Core
+	- Updated License To "All Rights Reserved" To Stop People Stealing My Code For There Own Non-Public "Releases" - Without My permission
+		- To Match CurseForge 
+	- Added 	
+		Libdatabroker-1.1
+	- Added A Check To See If you Running EMA and Jamba Twogather Thia will Disable "Jamba"
+		-- Developer Note: Really You Don't Want To Do This! Kittens Will Die!!!
+		
+## Follow
+	- Fixed issues #24 ( Follow Strobe Getting Canceled Out When Pvp Follow Warning Goes Off )
+	
+## Mail 
+	- New Module sends a List/BoE/Reagents Items To A Character.
+		- Will Only Trade BoE Gear! and CraftingReagent has been Updated both Now Have Groups!
+		- Added A BlackList To Stop Mailing Items
+		
+## Trade
+	- Fixed Issues #23
+		- Trade > Not Working With Connected Realms
+		- Fixed A Bug That Was Not Setting Grouplist Right.
+		
+## Guild
+		- Fixed A Bug That Was Not Setting Grouplist Right.
+		
+## LDBBar
+	- Some Code Help From Jabberie a few EMA Options Edited and made to Look better by ME!
+		- Click To open EMA Config
+		- Middle Click To Open Team Config
+		- Right Click to Push "ALL" settings
+		
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0095)
+Game Version: 8.0.1
+Release Date: 26/8/2018
+
+
+## Team
+	- Seems somewhere along the lines the code for "invite" <Tag> went MIA!!!
+	
+	
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0094)
+Game Version: 8.0.1
+Release Date: 26/8/2018
+
+## Core/Random
+	-Cleaned Up Some Debug Code
+
+## Team
+	- Invite GroupTag Should Work Again	
+	- Should Set To Raid if over 5 members!
+	- Set Assistant Is now working ( was it ever? )
+	
+## Trade
+	- Should Not Trade White Items (tools) When Have On Trade BoE items	
+
+## Guild
+	- Should Not Place White Items (tools) in Guild Bank When Have On BoE items		
+	
+## ISBoxer
+	- Fixed A Bug Where The Isboxer Teamlist Registering Right With EMA
+
+##Currency
+	- Added All BFA Currencys.
+	
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0092)
+Game Version: 8.0.1
+Release Date: 24/8/2018
+
+-- The Am Sorry About Everything Update!
+
+## Core/Random
+	-Fixed a Typo In Bindings.xml issue #7
+	- Should No Longer Get silly lag when looting issue #1
+	- Fixed issue #6
+
+## Team
+	- Fixed A Bug Where The Character Position Got Reset To 0 When Removing A Ream Member!	
+	- Team List Selecting Should No Longer Reset To Top Of List To Top Of List When Removing A Character
+	- ISBoxer Added Team Members Is Back!
+
+## Sell
+	- Reworked The Sell System And Should Be A Lot Faster uing The New Min/Max System.
+	**- Really This Time It Should Sell All Items In The Vender/Sell List And  Players Bag Without Stoping At Around 12 Items
+	- Added A BlackList To Stop Selling Items, Philosopher's Stones Comes to Mind
+	- Redesigned The Sell UI
+	- The Should Now Work With Blizzards Ilvl System better!
+	- You Can Now Destroy Items In The Sell List As Well This Will Delete The Item On All Chars At The Vender!
+		- Maybe You Nerver Wonnted The Heathstone After All!!
+	- Sell List Selecting Should No Longer Reset To Top Of List When Removing A Item
+
+## Trade
+	- Reworked The Trade System And Should Be A Lot Faster uing The New Min/Max System.
+	- Will Only Trade BoE Gear! and CraftingReagent has been Updated both Now Have Groups!
+	- Added A BlackList To Stop Selling Tradeing Items
+	- Redesigned The Trade UI
+	- Trade List Selecting Should No Longer Reset To Top Of List When Removing A Item 	
+
+## Guild
+	- Reworked The Guild System.
+	- Will Only Place in BoE Gear! and CraftingReagent has been Updated both Now Have Groups!
+	- Added A BlackList To Stop Placeing In Items
+	- Redesigned The Guild UI
+	- Guild List Selecting Should No Longer Reset To Top Of List When Removing A Item 
+
+## Item-Use 
+	- Cleaned Up Some Code And Tracked Down A "Small" Lag Issue	
+	- Removed Artifact Power From Bars
+		- We Don't Seem To Have Useable Artifact Items In BFA And Legion Ones Are Vender "Trash"
+		
+## Interaction
+	- Auto Loot
+		- Using New API to Find BoE Items You Loot!
+			--Developer	Note: Did not seem to "work"
+		- Fixed Tell Team If you get Rare Or Epic BoEs
+		
+## Toon
+	**- Follow
+		**- Added A Warning If A Membmer Of Your Team Is In PvP Combat Or You Have The Lack Of the Use Of Follow
+		**- Should Not Spam PvP Follow Warnings!
+	**- Requests
+		**- Added Toggle WarMode With Team!
+	**- Warnings
+		**- Fixed Full Bags Again! Issue #5 
+## Taxi
+	- Fixed A Bug That Was Closeing The Taxi Window issue #4 		
+
+## ISBoxer New
+	- Shows The Current ISBoxer Team In A List
+	- Isboxer New Sync Systsm!
+	- Adds /jamba-team iammaster and /jamba-follow commands for ISBoxer to use.	
+
+	
+	
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0088)
+Game Version: 8.0.1
+Release Date: 18/8/2018
+
+## Core/Random
+	-- Fixed a bug with "Some" keybindings not working
+
+---------------------------
+
+EMA Version: v8.0.1-Release(0086)
+Game Version: 8.0.1
+Release Date: 17/8/2018
+
+## Core/Random
+	-- Started Cleaning up < Legion Code.
+	-- Changed Translations To Fit EMA (TK911)
+	
+## Team
+	-- Added A New Key Binding To Change Master
+	
+## Follow
+	-- Added New Bindings:
+		- Follow Me
+		- Follow Strobe
+		- Follow Train
+	-- Added A New Command Line 
+		"/ema-follow Me <Tag/Group>"		
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0084/0085)
+Game Version: 8.0.1
+Release Date: 15/8/2018
+
+
+**** EMERGENCY FIX *****
+
+	--Fixed A Bug With Realm Names With Spaces And Not Setting Them Selfs Right!
+	-- DAM Debug/code -- am sorry i need to sleep i guess
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0087)
+Game Version: 8.0.1
+Release Date: 15/8/2018
+	
+## Team
+	-- Removed Isboxer Buttons
+	
+## Item-Use
+	-- Item KeyBindings Now Work As They Should
+	-- Will Now Add Useable Quest Items That sometimes are not classed as a Quest-item in the QuestLog EG: https://www.wowhead.com/item=163852/tortollan-pilgrimage-scroll 		
+	-- Fixed a few Locale Bugs in Quest-Tracker
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0081)
+Game Version: 8.0.1
+Release Date: 10/8/2018
+
+## Core
+	- Renamed 'Jamba-EE' TO EMA ( Ebony's MultiBoxing Assistant )
+	- No longer supported By IsBoxer!
+	- No Longer Available to Download on CureForge	
+	
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0078)
+Game Version: 8.0.1
+Release Date: 10/8/2018
+
+## EMA-Team 
+	-- Add Raid/Party Should Now Work Again!
+
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0078)
+Game Version: 8.0.1
+Release Date: 10/8/2018
+
+## EMA-Team 
+	-- IsboxerSync
+		- Removed,
+	-- Isboxer Auto Add Isboxer Team List.
+		- All this does is Adds New Team Members.
+		- Developer Note: Sync does not work don't seem right for to many.
+		- Isboxer Can Nolonger Remove Team Members Not In The Team List!
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0077)
+Game Version: 8.0.1
+Release Date: 09/8/2018
+
+## Team 
+	-- IsboxerSync 
+		- Fixed a bug in (Isboxer Sync) That was Removing Team Members "Randomly" 
+		- Developer Note: Am so sorry for the players i did not say was a EMA problem (it kinda was not) as this was a tricky bug to track down! -jen
+		- Sync team Only works on the 1st login.
+	--Naming
+		-Add @Target/@Mouseover Are Now Working Again *BUT WITHOUT "@"
+		-Using Target Or Mouseover Will Add Your Current Target Again
+		-Can No longer Have dumb case sensitive names EG:( TeStMyNameSuCKS) As Warcraft Does Not Support This Naming!
+	
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0076)
+Game Version: 8.0.1
+Release Date: 3/8/2018
+
+## Tag/Group
+	- Fixed A Bug that was checking the characters and groups was Case sensitive when using command line Tag/Groups
+
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0075)
+Game Version: 8.0.1
+Release Date: 30/7/2018
+
+
+## Team
+	- When Setting a Master Without a tag or using GUI will now update "all" characters
+	
+## Group/Tag
+	- Should no be able to add Case sensitive Custom Groups/Tags as intended
+		* fixed Bug: https://github.com/ebonyfaye/EMA/issues/10	
+	
+	
+	
+## Interaction
+	- Fixed a Bug that was dismounting team when Having The "Shift" Key Down
+		** Developer Note: Yes you can use shift to stop the clones falling to there deaths!!!
+	
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0074)
+Game Version: 8.0.1
+Release Date: 20/7/2018
+
+
+## Toon
+	- Should notlonger show CC warning of it self on master character
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0073)
+Game Version: 8.0.1
+Release Date: 20/7/2018
+
+## Guild
+	- Fixed A Disaply Bug With Not Dispalying the Amount To Keep On Toon
+
+## Message
+	- We Should have EMA Raid Warning Back! YAY!!!
+
+	
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0072)
+Game Version: 8.0.1
+Release Date: 19/7/2018
+---------------------------
+
+## Interaction
+	-- Should No longer Trun off blizzard AutoLoot.
+
+
+---------------------------
+
+EMA Version: v8.0.1-Release-v1.0(0071)
+Game Version: 8.0.1
+Release Date: 18/7/2018
+
+## Core
+	- Team Set Isboxer Sync List As Default
+
+
+## Display
+	- Fixed a Lua Error on Login
+
+
+
+---------------------------
+EMA Version: v8.0.1-Release-v1.0(0069)
+Game Version: 8.0.1
+Release Date: 18/7/2018
+---------------------------
+
+## Core
+	-Fixed deDE Locales (Quest-Tracker Showing As Dsipaly Team on German Clients 
+	-Cleaned up some Debug Code
+	
+
+---------------------------	
+EMA Version: v8.0.1-Beta-v1.0(0068)
+Game Version: 8.0.1
+Release Date: 17/7/2018
+---------------------------
+
+## Core
+	- Changed the layout of the GUI.
+    - New Grouping system no longer has "blank Pages"
+	- New Layout for modules
+	- Most of EMA is now classed as one Addon "EMA"
+	- Removed Tons Of Old code.
+	- Commands Lines Might Not Work Right.
+	- All Settings are Sorted Under A New DataBase And Have Reset!!!!
+	- All Locales system been merged into one File and is easyer to change!
+	- Added deDE Locale thanks TK911
+	- Updated As Much As I Can For 8.0.1 (BFA)
+
+#GUI
+	- New Logo'a Now Shows on GUI
+
+#API
+	Tons of EMAApi Changes.	
+	
+	
+#Team
+	- Now Shows Groups On The TeamList.
+	- Updated Gui to be more User Frindly.
+	- Added Real Sync Support For Isboxer Team Management!
+	- Added a Button To Add Isboxer Team list
+
+#Group (Tag)
+	- A full Rewrite of [Tag] Now named Group Use the Grouo List Page to add new groups/remove Groups that you can add to character's In The TeamGUI
+	- Every Module That Supported Tags Now Shows A Group DropDown list.
+
+
+### Modules changed 	
+	- Removed Taxi And Mount Modules
+	- Added New Module "Interaction"
+	- Added New Module "Guild"
+	- Removed EMAAdvancedLoot 
+	
+## Quest
+	- Tell "Team" If The A Character Has A Full Inventory When Handing In The A Quest With A Item
+
+## Quest-Tracker
+	- Removed Map Icon
+	- ProgressBar Quests Now Only Show's A Single Real Percent And Average Team Percent	
+	- Quests That Do Not Have A  "Objective As Such" Will Now Show On The EMA-Tracker
+	- Scenario Should always be at the top of the Quest-Tracker
+	- Shows Quest Items On The EMA Tracker
+	- Shows Faction Icon On New Campaign Quests
+	- Added A ToolTip That Shows Quest Rewards 
+	- Quest Objectives That have a Percent Tracker, Now Tracks Correctly On Tracker
+	- Added A Right ClickDropDown Menu For Extra Options 
+	
+
+## Interaction 	
+	New Module:
+	- Added Taxi Support
+		-- Old Taxi.
+	- Added Mount Support
+		-- Old Mount.
+		-- NOTE: Is Not Working In 8.0.0 So Has Been Disbabled For Now.
+	- Added "EMA-EE Loot V2"
+		-- Support to tell the team if you loot a Epic or Rare Items.
+		-- Speeded Up looting.
+		-- No Longer Gets stuck on Items.
+		-- No Longer runs a Endless Loop (WOWAPI DOES NOT LIKE LUA's: "while!! .. do ")
+
+## Guild
+	New Module:
+		-Support Adding Items In The GuildBank, By BankTab & Groups!
+		
+## Toon
+	- Warnings	
+		-- Added Support To Tell Your Master If Your Durability Drops Below A Certain Percent
+		-- Fixed When You Run Out Of Space In Your Bags.
+
+## ItemUse
+	-- Now Count Items In Teams Bags And Displays On The Item Tooltip's.
+		--- With Bank Items.
+	-- Total Team Count Display On the Frame. 	
+			

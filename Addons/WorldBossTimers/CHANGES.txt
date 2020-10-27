@@ -1,0 +1,22 @@
+lightweight tag 3e647a68e79989be0c109666701d66f9cf381595 v1.5.2
+Author:	Filip Stenstrom <filip.stenstrom.4488@gmail.com>
+Date:	Thu Apr 9 17:28:41 2020 +0200
+
+commit 3e647a68e79989be0c109666701d66f9cf381595
+Author: Filip Stenstrom <filip.stenstrom.4488@gmail.com>
+Date:   Thu Apr 9 17:28:41 2020 +0200
+
+    Update version number
+
+commit 24247f205b0d0db29d857f078c6940a6bb39e05b
+Author: Filip Stenstrom <filip.stenstrom.4488@gmail.com>
+Date:   Thu Apr 9 17:25:04 2020 +0200
+
+    Reduce number of chars for showing WM/Normal
+
+commit 5505f13eddd4b3cd9a5a3a89491fe519e3c099ae
+Author: Filip Stenstrom <filip.stenstrom.4488@gmail.com>
+Date:   Thu Apr 9 17:24:07 2020 +0200
+
+    Update .toc to 8.3
+

@@ -1,0 +1,22 @@
+lightweight tag 5f439e2da5018dd71784de08bf4e51360d606062 v1.3.4
+Author:	Meivyn <meivyn@live.ca>
+Date:	Sat May 30 01:36:44 2020 -0400
+
+commit 5f439e2da5018dd71784de08bf4e51360d606062
+Author: Meivyn <meivyn@live.ca>
+Date:   Sat May 30 01:36:44 2020 -0400
+
+    update: v1.3.4
+
+commit e56d2fbb6f1bef05d19b1b9b628c0e284e33bb16
+Author: Meivyn <meivyn@live.ca>
+Date:   Fri May 29 10:28:45 2020 -0400
+
+    fix: match instanceID instead of characterID (Closes #12)
+
+commit f56b7bbda408f8effe6f7e32aa944869e479ccf8
+Author: Meivyn <meivyn@live.ca>
+Date:   Thu Jan 16 21:03:26 2020 -0500
+
+    feat: world bosses numEncounters dynamic update
+

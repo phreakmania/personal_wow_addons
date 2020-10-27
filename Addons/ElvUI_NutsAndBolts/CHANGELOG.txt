@@ -1,0 +1,46 @@
+1.21 (Oct 13, 2020)
+*Release for Shadowlands prepatch and ElvUI 12.00
+*Removed Databar Colors module. It's in ElvUI now
+
+1.20 (Jul 9, 2020)
+*Fixed DataText Colors module
+*Fixed DataText color not applying after a reload
+*Update Class Colors
+
+1.19 (Feb 6, 2020)
+Fixed the options to follow the latest ElvUI changes
+
+1.18 (Jan 15, 2020)
+Fix LocationLite right click error. (#7)
+
+1.17 (Jan 15, 2020)
+Bump toc for patch 8.3
+
+1.16
+*toc update for patch 8.2.5
+
+1.15
+*toc update for patch 8.2
+
+1.14
+Fixed CreateShadow
+
+1.13
+*toc update for patch 8.1
+
+1.12
+*toc update for patch 8.1
+
+1.11
+*toc update for patch 8.1
+*Disable Objective Tracker by default
+*Prevent the Objective Tracker from being hidden/shown while taxi flying
+
+1.10
+*New module: Objective Frame hider
+*Enable some modules by default
+*Top Panel will use the new 'Under' style. It will show better with BenikUI dev version
+*Toggle Top and Bottom Panels via N&B options
+
+1.00
+Initial release

@@ -1,0 +1,16 @@
+## Interface: 80205
+## Title: Rare Share: |cffffd700Mechagon
+## Notes: The Mechagon extension for the Rare Share addon
+## Author: pffScrub
+## Version: v1.0.0
+## DefaultState: enabled
+## Dependencies: RareShare
+## SavedVariables: RareShareDB_Mechagon
+
+locales\enUS.lua
+locales\ruRU.lua
+locales\deDE.lua
+locales\frFR.lua
+locales\koKR.lua
+
+RareShareMechagon.lua

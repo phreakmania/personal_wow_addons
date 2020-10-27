@@ -1,0 +1,8 @@
+## Interface: 80000
+## Title: NoThunderTotemMap
+## Author: Scainburger
+## Version: 2.0
+## Notes: Automatically zooms out to the Highmountain map instead of showing the Thunder Totem map.
+## DefaultState: Enabled
+
+NoThunderTotemMap.lua

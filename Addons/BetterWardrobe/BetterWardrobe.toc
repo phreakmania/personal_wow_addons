@@ -1,0 +1,69 @@
+## Interface: 90001
+## Title: BetterWardrobe (V2.3.1)
+## Version: V2.3.1
+## Game Version: 9.0.1
+## Author: SLOKnightfall
+## Notes: 
+## LoadOnDemand: 1
+## LoadWith: Blizzard_Collections
+## SavedVariables: BetterWardrobe_Options, BetterWardrobe_CharacterData, BetterWardrobe_SavedSetData,BetterWardrobe_SubstituteItemData, Artifact
+
+#Libraries
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+Libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
+Libs\AceHook-3.0\AceHook-3.0.xml
+Libs\AceLocale-3.0\AceLocale-3.0.xml
+Libs\LibArmorToken-1.0\lib.xml
+Libs\LibAppropriateitems-1.0\lib.xml
+#Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+#Libs\LibTextDump-1.0\LibTextDump-1.0.lua
+Libs\LibUIDropDownMenu\LibUIDropDownMenu.xml
+#Libs\LibDropdown-1.0\lib.xml
+
+
+#Locale
+Locale\enUS.lua
+
+#Core files
+#Modules\Inspect.lua
+Data\Globals.lua
+Modules\Templates.xml
+Core.lua
+BetterWardrobe.xml
+
+
+#Modules
+Modules\TransmogVendor.xml
+Modules\ImportExport.lua
+
+#Modules\Randomizer.lua
+Modules\SavedOutfits.xml
+Modules\CollectionList.xml
+
+Modules\UIDropDownMenu.lua
+Modules\Tooltips.lua
+Modules\DressingRoom.xml
+Modules\ArtifactAppearances.lua
+
+#3rd party addon compatability
+Plugins\ElvUI.lua
+Plugins\CanIMogIt.lua
+Plugins\MogIt.lua
+#Data files
+Data\CameraData.lua
+Data\AppearanceData.lua
+Data\ArtifactData.lua
+#Data\SourceData.lua
+Data\CLOTH.lua
+Data\LEATHER.lua
+Data\MAIL.lua
+Data\PLATE.lua
+Data\COSMETIC.lua
+

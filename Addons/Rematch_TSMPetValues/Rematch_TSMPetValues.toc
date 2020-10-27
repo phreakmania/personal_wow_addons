@@ -1,0 +1,56 @@
+## Interface: 90001
+## Title: Rematch - TSM Pet Values
+## Notes: Add TSM market values ​​to the Rematch pet list
+## Notes-deDE: Ergänzt die Haustierliste von Rematch um TSM-Marktwerte
+## Author: Expelliarm5s
+## Version: 1.1.19
+## Dependencies:
+## SavedVariables: Rematch_TSMPetValuesDB
+
+
+# Libs
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+
+Libs\Ace3\AceAddon-3.0\AceAddon-3.0.xml
+Libs\Ace3\AceEvent-3.0\AceEvent-3.0.xml
+# Libs\Ace3\AceTimer-3.0\AceTimer-3.0.xml
+# Libs\Ace3\AceBucket-3.0\AceBucket-3.0.xml
+Libs\Ace3\AceHook-3.0\AceHook-3.0.xml
+Libs\Ace3\AceDB-3.0\AceDB-3.0.xml
+Libs\Ace3\AceDBOptions-3.0\AceDBOptions-3.0.xml
+Libs\Ace3\AceLocale-3.0\AceLocale-3.0.xml
+Libs\Ace3\AceConsole-3.0\AceConsole-3.0.xml
+Libs\Ace3\AceGUI-3.0\AceGUI-3.0.xml
+Libs\Ace3\AceConfig-3.0\AceConfig-3.0.xml
+# Libs\Ace3\AceComm-3.0\AceComm-3.0.xml
+# Libs\Ace3\AceTab-3.0\AceTab-3.0.xml
+# Libs\Ace3\AceSerializer-3.0\AceSerializer-3.0.xml
+
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.xml
+Libs\LibQTip-1.0\lib.xml
+Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
+Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
+
+# Locales
+Locale\enUS.lua
+Locale\deDE.lua
+
+# Main
+Rematch_TSMPetValues.lua
+Options.lua
+LDB.Lua
+PetItem.lua
+
+# Price Providers
+PriceSource_TSM.lua
+PriceSource_UJ.lua
+PriceSource_AHDB.lua
+
+# GUI Hooks
+GUI_Rematch_Petlist1.lua
+GUI_Rematch_Petlist2.lua
+GUI_Rematch_Sorting.lua
+GUI_Tooltip.lua
+
+## EOF

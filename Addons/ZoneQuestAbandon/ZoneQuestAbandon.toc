@@ -1,0 +1,6 @@
+## Interface: 80000
+## Title: Zone Quest Abandon
+## Version: 2.0
+## Author: Calpurnius
+## Notes: Allows abandoning of all quests in a specific zone
+ZoneQuestAbandon.lua

@@ -1,0 +1,10 @@
+lightweight tag a50a49bf0b0eec014ee21cf5df35db9e0e3aa832 DetailsRetail.9.0.1.7933.143
+Author:	Tercio Jose <terciob19@hotmail.com>
+Date:	Sun Oct 25 20:51:04 2020 -0300
+
+commit a50a49bf0b0eec014ee21cf5df35db9e0e3aa832
+Author: Tercio Jose <terciob19@hotmail.com>
+Date:   Sun Oct 25 20:51:04 2020 -0300
+
+    Fixed customs
+

@@ -1,0 +1,46 @@
+lightweight tag 1e03f72403b828493e942cce26e8afb392a8077c 1.71
+Author:	Azilroka <darktemplar9900@yahoo.com>
+Date:	Sun Oct 18 21:31:07 2020 -0500
+
+commit 1e03f72403b828493e942cce26e8afb392a8077c
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 21:31:07 2020 -0500
+
+    1.71
+
+commit a7f5e07c3b586612580cc847a6880685f8e3baf9
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 21:26:08 2020 -0500
+
+    Switching to Tree
+
+commit eea1be1a73f8ebcbccdb30fa956c04aa87454919
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 11:12:31 2020 -0500
+
+    MXP Tweaks
+
+commit d1a00dedd8c8e9650f6ad0e2b5d78caf81243940
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 11:06:26 2020 -0500
+
+    MXP Quest Log Experience
+
+commit 6d8618eb2a597d52d1284c851a2c65171e81ae1e
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 11:04:29 2020 -0500
+
+    MXp Quest Log Experience
+
+commit e5d8fe805f8330014ae2cb02ab4f331b4f8697a5
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Oct 18 10:54:04 2020 -0500
+
+    MXP
+
+commit c217d70c70e8bf4977dbf872d2bec1144b4e0e6f
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Oct 17 11:57:09 2020 -0500
+
+    Friend Groups - Work
+

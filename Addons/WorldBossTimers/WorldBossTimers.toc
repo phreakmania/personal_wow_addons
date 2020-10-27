@@ -1,0 +1,18 @@
+## Interface: 80300
+## Title: WorldBossTimers
+## Notes: Creates a timer for world boss kills
+## Author: Soulstorm
+## Version: v1.5.2
+## SavedVariables: WorldBossTimersDB
+
+embeds.xml
+
+Util.lua
+Sound.lua
+BossData.lua
+Com.lua
+NameplateTracker.lua
+GUI.lua
+Config.lua
+KillInfo.lua
+WorldBossTimers.lua

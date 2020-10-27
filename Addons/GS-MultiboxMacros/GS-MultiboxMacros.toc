@@ -1,0 +1,66 @@
+## Interface: 70300
+## Title: |cffff0000GS-E:|r |551A8B000Jabberie's Multiboxing Macros|r
+## Notes: A Collection of GSE Macros specifically tailored for Multiboxing
+## Author: Jabberie@Draka
+## Version: v2.1.0
+## RequiredDeps: GSE
+
+
+GSEMacros\DeathKnight\Blood.lua
+GSEMacros\DeathKnight\Frost.lua
+GSEMacros\DeathKnight\Unholy.lua
+
+GSEMacros\DemonHunter\Havoc.lua
+GSEMacros\DemonHunter\Vengeance.lua
+
+GSEMacros\Druid\Balance.lua
+GSEMacros\Druid\Feral.lua
+GSEMacros\Druid\Guardian.lua
+GSEMacros\Druid\Restoration.lua
+
+GSEMacros\Hunter\BeastMastery.lua
+GSEMacros\Hunter\Marksmanship.lua
+GSEMacros\Hunter\Survival.lua
+
+GSEMacros\Mage\Arcane.lua
+GSEMacros\Mage\Fire.lua
+GSEMacros\Mage\Frost.lua
+
+GSEMacros\Monk\Brewmaster.lua
+GSEMacros\Monk\Mistweaver.lua
+GSEMacros\Monk\Windwalker.lua
+
+GSEMacros\Paladin\Holy.lua
+GSEMacros\Paladin\Protection.lua
+GSEMacros\Paladin\Retribution.lua
+
+GSEMacros\Priest\Discipline.lua
+GSEMacros\Priest\Holy.lua
+GSEMacros\Priest\Shadow.lua
+
+GSEMacros\Rogue\Assassination.lua
+GSEMacros\Rogue\Outlaw.lua
+GSEMacros\Rogue\Subtlety.lua
+
+GSEMacros\Shaman\Elemental.lua
+GSEMacros\Shaman\Enhancement.lua
+GSEMacros\Shaman\Restoration.lua
+
+GSEMacros\Warlock\Affliction.lua
+GSEMacros\Warlock\Demonology.lua
+GSEMacros\Warlock\Destruction.lua
+
+GSEMacros\Warrior\Arms.lua
+GSEMacros\Warrior\Fury.lua
+GSEMacros\Warrior\Protection.lua
+
+## ################
+## Special Macros
+## ################
+
+GSEMacros\Hunter\BeastMastery\BM_Farm.lua
+GSEMacros\Druid\Affinity_Boomkin.lua
+GSEMacros\Druid\Affinity_Resto.lua
+GSEMacros\Druid\BattleRez.lua
+
+loaded.lua
