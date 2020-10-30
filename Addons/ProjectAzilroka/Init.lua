@@ -95,7 +95,7 @@ end
 
 PA.Title = GetAddOnMetadata('ProjectAzilroka', 'Title')
 PA.Version = GetAddOnMetadata('ProjectAzilroka', 'Version')
-PA.Authors = GetAddOnMetadata('ProjectAzilroka', 'Author'):gsub(", ", "    ")
+PA.Authors = GetAddOnMetadata('ProjectAzilroka', 'Author'):gsub(', ', '    ')
 
 PA.AllPoints = { CENTER = 'CENTER', BOTTOM = 'BOTTOM', TOP = 'TOP', LEFT = 'LEFT', RIGHT = 'RIGHT', BOTTOMLEFT = 'BOTTOMLEFT', BOTTOMRIGHT = 'BOTTOMRIGHT', TOPLEFT = 'TOPLEFT', TOPRIGHT = 'TOPRIGHT' }
 
@@ -114,19 +114,21 @@ local function GetoUF()
 end
 PA.oUF = GetoUF()
 
+PA.Classes = {}
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do PA.Classes[v] = k end
+for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do PA.Classes[v] = k end
+
 function PA:ClassColorCode(class)
-	local color = PA:GetClassColor(class)
+	local color = PA:GetClassColor(PA.Classes[class])
 	return format('FF%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)
 end
 
 function PA:GetClassColor(class)
-	return _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[class] or _G.RAID_CLASS_COLORS[class] or { r = 1, g = 1, b = 1 }
+	return _G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[class] or _G.RAID_CLASS_COLORS[class or 'PRIEST']
 end
 
 local Color = PA:GetClassColor(PA.MyClass)
 PA.ClassColor = { Color.r, Color.g, Color.b }
-
-PA.Classes = {}
 
 PA.ScanTooltip = CreateFrame('GameTooltip', 'PAScanTooltip', _G.UIParent, 'GameTooltipTemplate')
 PA.ScanTooltip:SetOwner(_G.UIParent, "ANCHOR_NONE")
@@ -135,9 +137,6 @@ PA.PetBattleFrameHider = CreateFrame('Frame', 'PA_PetBattleFrameHider', UIParent
 PA.PetBattleFrameHider:SetAllPoints()
 PA.PetBattleFrameHider:SetFrameStrata('LOW')
 RegisterStateDriver(PA.PetBattleFrameHider, 'visibility', '[petbattle] hide; show')
-
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do PA.Classes[v] = k end
-for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do PA.Classes[v] = k end
 
 function PA:GetUIScale()
 	local effectiveScale = _G.UIParent:GetEffectiveScale()
@@ -237,7 +236,7 @@ function PA:SetTemplate(frame)
 		if frame.SetTemplate then
 			frame:SetTemplate('Transparent', true)
 		else
-			frame:SetBackdrop({ bgFile = PA.Solid, edgeFile = PA.Solid, tile = false, tileSize = 0, edgeSize = 1, insets = { left = 0, right = 0, top = 0, bottom = 0 } })
+			frame:SetBackdrop({ bgFile = PA.Solid, edgeFile = PA.Solid, edgeSize = 1 })
 		end
 		frame:SetBackdropColor(.08, .08, .08, .8)
 		frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0)
@@ -514,7 +513,7 @@ PA.Defaults = {
 	}
 }
 
-PA.Options = PA.ACH:Group(PA:Color(PA.Title), nil, 6, 'tree')
+PA.Options = PA.ACH:Group(PA:Color(PA.Title), nil, 6)
 
 function PA:GetOptions()
 	PA.AceOptionsPanel.Options.args.ProjectAzilroka = PA.Options
@@ -553,6 +552,8 @@ function PA:PLAYER_LOGIN()
 	PA.AS = _G.AddOnSkins and _G.AddOnSkins[1]
 	PA.EP = LibStub('LibElvUIPlugin-1.0', true)
 	PA.AceOptionsPanel = PA.ElvUI and _G.ElvUI[1] or PA.EC
+
+	PA.Options.childGroups = PA.EC and 'tab' or 'tree'
 
 	for _, module in PA:IterateModules() do
 		if module.BuildProfile then PA:CallModuleFunction(module, module.BuildProfile) end

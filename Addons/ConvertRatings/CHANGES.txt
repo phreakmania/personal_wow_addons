@@ -1,16 +1,10 @@
-lightweight tag 463caaa566e560e333e07b0947b6dde5477e567b v1.16
-Author:	GitHub <noreply@github.com>
-Date:	Mon Jun 8 15:52:50 2020 -0400
+lightweight tag e35024beb41c1a92b283cc7663b286e4830ba97e v2.0.1
+Author:	Mynian <mynian@gmail.com>
+Date:	Mon Oct 26 19:11:44 2020 -0400
 
-commit 463caaa566e560e333e07b0947b6dde5477e567b
-Author: mynian <mynian@gmail.com>
-Date:   Mon Jun 8 15:52:50 2020 -0400
+commit e35024beb41c1a92b283cc7663b286e4830ba97e
+Author: Mynian <mynian@gmail.com>
+Date:   Mon Oct 26 19:11:44 2020 -0400
 
-    Update ConvertRatings.toc
-
-commit 72e20eb00fd6ff41c1d51ce814becab0b13a022f
-Author: mynian <mynian@gmail.com>
-Date:   Mon Jun 8 15:49:22 2020 -0400
-
-    Update ConvertRatings.lua
+    copypasta error in the global names for ratings
 

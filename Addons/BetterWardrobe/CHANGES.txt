@@ -1,12 +1,24 @@
-tag 011cfafdaf1c879744dbd6654d6fbda70c72263d V2.3.1
+tag 97644d30e08f110c8e59cb8ce3135483d266c506 V2.3.4
 Author:	SLOKnightfall <SLOKnightfall@gmail.com>
-Date:	Sun Oct 25 16:55:46 2020 -0700
+Date:	Mon Oct 26 17:07:04 2020 -0700
 
-Bugfix
+-Bugfixes
 
-commit 1e9189c4756543fa80eee70602b340862bbdcaa8
+commit 8de1774e11d8e52b1d2107d4c1d1f4cac625e628
 Author: SLOKnightfall <SLOKnightfall@gmail.com>
-Date:   Sun Oct 25 16:55:27 2020 -0700
+Date:   Mon Oct 26 17:06:40 2020 -0700
 
-    -Removed old menu code that was causing errors.
+    -Fixed remaining issues with hiding extra sets at the transmog vendor and in visual view
+
+commit 59c9fd3c06e9d3d8d7fa8786aeec83e16e3bd995
+Author: SLOKnightfall <SLOKnightfall@gmail.com>
+Date:   Mon Oct 26 16:57:33 2020 -0700
+
+    -Fixed issue with not being able to substitute items that are no longer available.
+
+commit 57ebc9857b1f7bef378be7cecf1bfdb1f0a390ed
+Author: SLOKnightfall <SLOKnightfall@gmail.com>
+Date:   Mon Oct 26 13:17:23 2020 -0700
+
+    -Issue #104 - Added Class Filter option to extra sets menu
 

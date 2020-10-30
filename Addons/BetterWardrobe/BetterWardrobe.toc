@@ -1,6 +1,6 @@
 ## Interface: 90001
-## Title: BetterWardrobe (V2.3.1)
-## Version: V2.3.1
+## Title: BetterWardrobe (V2.3.4)
+## Version: V2.3.4
 ## Game Version: 9.0.1
 ## Author: SLOKnightfall
 ## Notes: 

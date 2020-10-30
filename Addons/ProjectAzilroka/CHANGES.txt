@@ -1,46 +1,94 @@
-lightweight tag 1e03f72403b828493e942cce26e8afb392a8077c 1.71
+lightweight tag 9e170c6e6eadab77c8d978a6acc5b4a496273e81 1.72
 Author:	Azilroka <darktemplar9900@yahoo.com>
-Date:	Sun Oct 18 21:31:07 2020 -0500
+Date:	Mon Oct 26 20:06:26 2020 -0500
 
-commit 1e03f72403b828493e942cce26e8afb392a8077c
+commit 9e170c6e6eadab77c8d978a6acc5b4a496273e81
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 21:31:07 2020 -0500
+Date:   Mon Oct 26 20:06:26 2020 -0500
 
-    1.71
+    1.72
 
-commit a7f5e07c3b586612580cc847a6880685f8e3baf9
+commit 86d6ac7ac477650205373e6feb0d3520b9c72868
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 21:26:08 2020 -0500
+Date:   Mon Oct 26 20:05:52 2020 -0500
 
-    Switching to Tree
+    SMB
 
-commit eea1be1a73f8ebcbccdb30fa956c04aa87454919
+commit a9e5496a676fb25d07def72aae4a27400b2e467d
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 11:12:31 2020 -0500
+Date:   Sat Oct 24 20:04:28 2020 -0500
 
-    MXP Tweaks
+    SMB Garrison
 
-commit d1a00dedd8c8e9650f6ad0e2b5d78caf81243940
+commit d130f116e89d9a66bab95d60aec947e73f7525a5
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 11:06:26 2020 -0500
-
-    MXP Quest Log Experience
-
-commit 6d8618eb2a597d52d1284c851a2c65171e81ae1e
-Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 11:04:29 2020 -0500
-
-    MXp Quest Log Experience
-
-commit e5d8fe805f8330014ae2cb02ab4f331b4f8697a5
-Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Oct 18 10:54:04 2020 -0500
+Date:   Sat Oct 24 20:04:15 2020 -0500
 
     MXP
 
-commit c217d70c70e8bf4977dbf872d2bec1144b4e0e6f
+commit bcdf160cb74784def09c3358df353bf5b9b64b0c
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sat Oct 17 11:57:09 2020 -0500
+Date:   Sat Oct 24 20:04:07 2020 -0500
 
-    Friend Groups - Work
+    Color Stuff
+
+commit 9404c1c625b6d45776dc66fee12de5691a76fd33
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Oct 24 20:03:56 2020 -0500
+
+    EFL
+
+commit 28878bc58505a7e0470c57d5d2528b59345c2a86
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Oct 24 20:03:36 2020 -0500
+
+    ReputationReward
+
+commit e5a47babbe711e7e02e6b3d4b47724dab3bceab3
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Fri Oct 23 19:13:54 2020 -0500
+
+    SMB / MXP
+
+commit f6094393f7e5f43fd06b82475f672a751cd1f4dd
+Author: Repooc <tjcooper1982@gmail.com>
+Date:   Thu Oct 22 21:24:20 2020 -0400
+
+    try this azil
+
+commit 6acf25adbdaa6472fe2db835edefcd41d00802ec
+Author: Repooc <tjcooper1982@gmail.com>
+Date:   Thu Oct 22 20:43:31 2020 -0400
+
+    should fix the issues from api changes... not fully tested.
+
+commit 339ef63a0ceee9c4b360d1318e79defbc9d3ec42
+Author: Repooc <tjcooper1982@gmail.com>
+Date:   Thu Oct 22 20:13:17 2020 -0400
+
+    fix GetQuestLogSelection as api changed
+
+commit a294fc401d745821776e84924e777ea757f16620
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Mon Oct 19 21:29:18 2020 -0500
+
+    MXP
+
+commit 4a5b736aeec65ba4bce411f5aa863e992b664794
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Mon Oct 19 21:29:07 2020 -0500
+
+    PA Stuff
+
+commit 10b2de52a5b95190d12a93dcea191cb2e269d56a
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Mon Oct 19 18:02:06 2020 -0500
+
+    iFilger Enable Fix
+
+commit 56f3d324a5a00173abb6b9c4ea5da30f41694b82
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Mon Oct 19 15:55:44 2020 -0500
+
+    Class Color
 

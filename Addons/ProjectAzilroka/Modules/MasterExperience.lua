@@ -8,7 +8,7 @@ MXP.isEnabled = false
 PA.MXP, _G.MasterExperience = MXP, MXP
 
 local _G = _G
-local min, format = min, format
+local min, max, format = min, max, format
 local tostring, tonumber = tostring, tonumber
 local strsplit = strsplit
 
@@ -89,8 +89,8 @@ function MXP:UpdateBar(barID, infoString)
 	local expColor, restedColor, questColor = MXP.db.Colors.Experience, MXP.db.Colors.Rested, MXP.db.Colors.Quest
 
 	if MXP.db.ColorByClass and info.class then
-		expColor = MXP:ConvertColorToClass(expColor, RAID_CLASS_COLORS[info.class])
-		restedColor = MXP:ConvertColorToClass(restedColor, RAID_CLASS_COLORS[info.class], .6)
+		expColor = MXP:ConvertColorToClass(expColor, PA:GetClassColor(info.class))
+		restedColor = MXP:ConvertColorToClass(restedColor, PA:GetClassColor(info.class), .6)
 	end
 
 	bar:SetStatusBarColor(expColor.r, expColor.g, expColor.b, expColor.a)
@@ -282,7 +282,10 @@ function MXP:QUEST_LOG_UPDATE()
 	QuestLogXP, ZoneQuestXP, CompletedQuestXP = 0, 0, 0
 
 	for i = 1, C_QuestLog.GetNumQuestLogEntries() do
-		MXP:CheckQuests(C_QuestLog.GetQuestIDForLogIndex(i), C_QuestLog.GetInfo(i).isOnMap)
+		local info = C_QuestLog.GetInfo(i)
+		if not info.isHidden then
+			MXP:CheckQuests(C_QuestLog.GetQuestIDForLogIndex(i), info.isOnMap)
+		end
 	end
 
 	MXP:SendMessage()
@@ -377,14 +380,15 @@ function MXP:UpdateCurrentBars()
 end
 
 function MXP:SendMessage()
-	local message = format('%s:%d:%s:%s:%d:%d:%d:%d:%d:%d:%d', PA.MyClass, CurrentLevel, tostring(IsPlayerAtEffectiveMaxLevel()), tostring(IsXPUserDisabled()), CurrentXP or 0, XPToLevel or 0, RestedXP or 0, QuestLogXP or 0, ZoneQuestXP or 0, CompletedQuestXP or 0)
+	if not IsPlayerInWorld() then return end
+
 	if MXP.db.Party and IsInGroup(LE_PARTY_CATEGORY_HOME) and not IsInRaid() then
-		message = format('%s:%s', MXP.playerRealm, message)
+		local message = format('%s:%s:%d:%s:%s:%d:%d:%d:%d:%d:%d:%d', MXP.playerRealm, PA.MyClass or UnitClass('player'), CurrentLevel or UnitLevel('player'), tostring(IsPlayerAtEffectiveMaxLevel()), tostring(IsXPUserDisabled()), CurrentXP or 0, XPToLevel or 0, RestedXP or 0, QuestLogXP or 0, ZoneQuestXP or 0, CompletedQuestXP or 0)
 		C_ChatInfo.SendAddonMessage('PA_MXP', message, 'PARTY')
 	end
 
 	if MXP.db.BattleNet and MXP.isBNConnected then
-		message = format('%s:%s', MXP.battleTag, message)
+		local message = format('%s:%s:%d:%s:%s:%d:%d:%d:%d:%d:%d:%d', MXP.battleTag, PA.MyClass or UnitClass('player'), CurrentLevel or UnitLevel('player'), tostring(IsPlayerAtEffectiveMaxLevel()), tostring(IsXPUserDisabled()), CurrentXP or 0, XPToLevel or 0, RestedXP or 0, QuestLogXP or 0, ZoneQuestXP or 0, CompletedQuestXP or 0)
 		for _, info in pairs(MXP.BNFriends) do
 			if info.presenceID then
 				BNSendGameData(info.presenceID, 'PA_MXP', message)
@@ -542,5 +546,9 @@ function MXP:Initialize()
 
 	MXP:UpdateAllBars()
 
-	MXP:ScheduleRepeatingTimer('SendMessage', 2)
+	if IsPlayerAtEffectiveMaxLevel() then -- Place in recieve only mode.
+		MXP:SendMessage()
+	else
+		MXP:ScheduleRepeatingTimer('SendMessage', 2)
+	end
 end

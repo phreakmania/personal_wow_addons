@@ -1,6 +1,0 @@
-## Interface: 70000
-## Title: NoFlashingTabs
-## Notes: Disables the flashing effect on chat tabs
-## Author: boLek
-## Version: 1.1
-NoFlashingTabs.lua

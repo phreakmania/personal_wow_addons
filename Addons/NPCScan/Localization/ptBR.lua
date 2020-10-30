@@ -12,8 +12,7 @@ L["BOTTOMRIGHT"] = "Inferior Direito "
 L["CENTER"] = "Centro"
 L["Completed Achievement Criteria"] = "Critério para conquista concluída"
 L["Completed Quest Objectives"] = "Objetivos de Missões Concluídas"
---[[Translation missing --]]
---[[ L["Dead NPCs"] = "Dead NPCs"--]] 
+L["Dead NPCs"] = "PNJ Morto"
 L["Detection"] = "Detecção"
 L["Drag to set the spawn point for targeting buttons."] = "Arraste para definir o ponto de nascimento para os botões alvo."
 L["Duration"] = "Duração"

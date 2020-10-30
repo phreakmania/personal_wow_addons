@@ -455,7 +455,6 @@ local options = {
 								width = 1.6,
 								desc = L["TooltipPreview_DressingDummy"],
 							},
-
 							TooltipPreviewRotate = {
 								order = 11,
 								name = L["Auto Rotate"],
@@ -1019,4 +1018,7 @@ function addon:OnEnable()
 				--	)
 
 				--WardrobeCollectionFrame.ItemsCollectionFrame.RightShoulderCheckbox:Show() 
+	--temp fix to get libray menus to close when clicking outside of tehm
+	hooksecurefunc("UIDropDownMenu_HandleGlobalMouseEvent", function(button, event)  L_UIDropDownMenu_HandleGlobalMouseEvent( button, event) end)
+
 end

@@ -7,7 +7,7 @@
 -- Main non-UI code
 ------------------------------------------------------------
 
-PawnVersion = 2.0401
+PawnVersion = 2.0402
 
 -- Pawn requires this version of VgerCore:
 local PawnVgerCoreVersionRequired = 1.12
@@ -399,8 +399,9 @@ function PawnInitialize()
 
 	-- In-bag upgrade icons
 	if ContainerFrame_UpdateItemUpgradeIcons then
+
 		PawnOriginalIsContainerItemAnUpgrade = IsContainerItemAnUpgrade
-		IsContainerItemAnUpgrade = function(bagID, slot, ...)
+		PawnIsContainerItemAnUpgrade = function(bagID, slot, ...)
 			if PawnCommon.ShowBagUpgradeAdvisor then
 				local _, Count, _, _, _, _, ItemLink = GetContainerItemInfo(bagID, slot)
 				if not Count then return false end -- If the stack count is 0, it's clearly not an upgrade
@@ -409,8 +410,23 @@ function PawnInitialize()
 			else
 				return PawnOriginalIsContainerItemAnUpgrade(bagID, slot, ...)
 			end
-			-- FUTURE: Consider hooking ContainerFrameItemButton_UpdateItemUpgradeIcon / ContainerFrame_UpdateItemUpgradeIcons instead, but then Pawn would need its own "retry when not enough information is available" logic.  And Pawn also would no longer automatically integrate with other bag addons.
 		end
+
+		-- This should be an exact copy of this function from ContainerFrame.lua, except with IsContainerItemAnUpgrade replaced
+		-- with PawnIsContainerItemAnUpgrade. Changing IsContainerItemAnUpgrade now causes taint errors. :(
+		ContainerFrameItemButton_UpdateItemUpgradeIcon = function(self)
+			self.timeSinceUpgradeCheck = 0;
+	
+			local itemIsUpgrade = PawnIsContainerItemAnUpgrade(self:GetParent():GetID(), self:GetID());
+			if ( itemIsUpgrade == nil and not self.isExtended) then -- nil means not all the data was available to determine if this is an upgrade.
+				self.UpgradeIcon:SetShown(false);
+				self:SetScript("OnUpdate", ContainerFrameItemButton_TryUpdateItemUpgradeIcon);
+			elseif (not self.isExtended) then
+				self.UpgradeIcon:SetShown(itemIsUpgrade);
+				self:SetScript("OnUpdate", nil);
+			end
+		end
+
 	end
 
 	-- We're now effectively initialized.  Just the last steps of scale initialization remain.
@@ -434,7 +450,7 @@ function PawnInitialize()
 		-- The separator strings are completely wrong on French WoW Classic.  :(
 		if (LARGE_NUMBER_SEPERATOR and PawnLocal.ThousandsSeparator ~= LARGE_NUMBER_SEPERATOR) or
 		(DECIMAL_SEPERATOR and PawnLocal.DecimalSeparator ~= DECIMAL_SEPERATOR) then
-			VgerCore.Fail("Pawn may provide incorrect advice due to a potential addon conflict: Pawn is not compatible with Combat Numbers Separator, Titan Panel Artifact Power, or other addons that change the way that numbers appear.")
+			VgerCore.Fail("Pawn may provide incorrect advice due to a potential addon conflict: Pawn is not compatible with Combat Numbers Separator, Titan Panel Artifact Power, or other addons that change the way that numbers appear. Or, if you're seeing this right after a patch, please let Vger know which language you're playing in.")
 		end
 	end
 
@@ -647,6 +663,12 @@ function PawnInitializeOptions()
 		PawnClearCache()
 		PawnInvalidateBestItems()
 		PawnClearBestItemLevelData()
+	end
+	if PawnCommon.LastVersion < 2.0402 and not VgerCore.IsClassic then
+		-- Frost death knights can fully use 2H weapons again, but the setting to hide 2H upgrades is persistent.
+		-- Clear it this one time; people can go back to hiding them if they want.
+		local FrostDK = PawnCommon.Scales["\"MrRobot\":DEATHKNIGHT2"]
+		if FrostDK then FrostDK.DoNotShow2HUpgrades = false end
 	end
 	if ((not VgerCore.IsClassic) and PawnCommon.LastVersion < PawnMrRobotLastUpdatedVersion) or
 		(VgerCore.IsClassic and PawnCommon.LastVersion < PawnClassicLastUpdatedVersion) then
