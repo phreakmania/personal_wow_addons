@@ -36,10 +36,8 @@ local AddonDB_Defaults = {
 				LFGDungeons = {},		-- info about LFG dungeons/raids
 				ChallengeMode = {},	-- info about mythic+
                 WorldBosses = {},
-								
-				Notes = {},
-				Tasks = {},
-				Mail = {},			-- This is for intenal mail only, unrelated to wow's
+                
+                expiredCalendar = {},
 			}
 		}
 	}
@@ -223,8 +221,9 @@ local function ScanCalendar()
 		for day = startDay, numDays do
 			for i = 1, C_Calendar.GetNumDayEvents(monthOffset, day) do		-- number of events that day ..
 				-- http://www.wowwiki.com/API_CalendarGetDayEvent
-				local title, hour, minute, calendarType, _, eventType, _, _, inviteStatus = C_Calendar.GetDayEvent(monthOffset, day, i)
-				
+                local info = C_Calendar.GetDayEvent(monthOffset, day, i)
+				local title, hour, minute, calendarType, eventType, inviteStatus = info.title, info.startTime.hour, info.startTime.minute, info.calendarType, info.eventType, info.inviteStatus 
+
 				-- 8.0 : for some events, the calendar type may be nil, filter them out
 				if calendarType and calendarType ~= "HOLIDAY" and calendarType ~= "RAID_LOCKOUT"
 					and calendarType ~= "RAID_RESET" and inviteStatus ~= CALENDAR_INVITESTATUS_INVITED
@@ -235,9 +234,9 @@ local function ScanCalendar()
 					local eventDate = format("%04d-%02d-%02d", year, month, day)
 					local eventTime = format("%02d:%02d", hour, minute)
 
-					-- Only add events older than "now"
+					-- Only add events newer than "now"
 					if eventDate > today or (eventDate == today and eventTime > now) then
-						table.insert(calendar, format("%s|%s|%s|%d|%d", eventDate, eventTime, title.title, eventType, inviteStatus ))
+						table.insert(calendar, format("%s|%s|%s|%d|%d", eventDate, eventTime, title, eventType, inviteStatus ))
 					end
 				end
 			end
@@ -465,7 +464,23 @@ local function _HasCalendarEventExpired(character, index)
 end
 
 local function _DeleteCalendarEvent(character, index)
-	table.remove(character.Calendar, index)
+	local v = table.remove(character.Calendar, index)
+    table.insert(character.expiredCalendar, v)
+end
+
+local function _GetNumExpiredCalendarEvents(character)
+	return #character.expiredCalendar
+end
+
+local function _GetExpiredCalendarEventInfo(character, index)
+	local event = character.expiredCalendar[index]
+	if event then
+		return strsplit("|", event)		-- eventDate, eventTime, title, eventType, inviteStatus
+	end
+end
+
+local function _DeleteExpiredCalendarEvent(character, index)
+	local v = table.remove(character.expiredCalendar, index)
 end
 
 -- * Item Cooldowns *
@@ -645,6 +660,10 @@ local PublicMethods = {
 	GetCalendarEventInfo = _GetCalendarEventInfo,
 	HasCalendarEventExpired = _HasCalendarEventExpired,
 	DeleteCalendarEvent = _DeleteCalendarEvent,
+    
+    GetNumExpiredCalendarEvents = _GetNumExpiredCalendarEvents,
+    GetExpiredCalendarEventInfo = _GetExpiredCalendarEventInfo,
+    DeleteExpiredCalendarEvent = _DeleteExpiredCalendarEvent,
 
 	GetNumItemCooldowns = _GetNumItemCooldowns,
 	GetItemCooldownInfo = _GetItemCooldownInfo,
@@ -670,6 +689,10 @@ function addon:OnInitialize()
 	DataStore:SetCharacterBasedMethod("GetCalendarEventInfo")
 	DataStore:SetCharacterBasedMethod("HasCalendarEventExpired")
 	DataStore:SetCharacterBasedMethod("DeleteCalendarEvent")
+    
+    DataStore:SetCharacterBasedMethod("GetNumExpiredCalendarEvents")
+    DataStore:SetCharacterBasedMethod("GetExpiredCalendarEventInfo")
+    DataStore:SetCharacterBasedMethod("DeleteExpiredCalendarEvent")
 
 	DataStore:SetCharacterBasedMethod("GetNumItemCooldowns")
 	DataStore:SetCharacterBasedMethod("GetItemCooldownInfo")

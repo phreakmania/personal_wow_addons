@@ -217,8 +217,13 @@ local function AddRealm(AccountName, RealmName)
 
 	-- 3) Add the totals
     if (mode ~= ALLREALMS_HIDEREALMS) then
+        local levelTotal = colors.white..realmLevels
+        if addon:GetOption("UI.Tabs.Summary.ShowLevelTotalAverage") then
+            levelTotal = colors.white .. ((numCharacters ~= 0) and math.floor(realmLevels / numCharacters) or 0)
+        end
+        
         table.insert(characterList, { linetype = INFO_TOTAL_LINE + realmOffset,
-		  level = colors.white .. realmLevels,
+		  level = levelTotal,
 		  money = realmMoney,
 		  played = Altoholic:GetTimeString(realmPlayed),
 		  bagSlots = realmBagSlots,

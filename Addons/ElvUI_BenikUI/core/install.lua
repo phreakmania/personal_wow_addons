@@ -1,4 +1,5 @@
-local BUI, E, L, V, P, G = unpack(select(2, ...))
+local BUI, E, _, V, P, G = unpack(select(2, ...))
+local L = E.Libs.ACL:GetLocale('ElvUI', E.global.general.locale or 'enUS');
 local format, checkTable = format, next
 local tinsert, twipe, tsort, tconcat = table.insert, table.wipe, table.sort, table.concat
 local _G = _G
@@ -1920,6 +1921,11 @@ local function SetupAddons()
 		tinsert(addonNames, 'Skada')
 	end
 
+	-- Kaliels Tracker
+	if BUI:IsAddOnEnabled('!KalielsTracker') then
+		BUI:LoadKalielsProfile()
+		tinsert(addonNames, 'Kaliels Tracker')
+	end
 	-- Project Azilroka
 	if BUI.PA then
 		BUI:LoadPAProfile()
@@ -1953,7 +1959,7 @@ local function SetupDataTexts(role)
 	-- Data Texts
 	if BUI.LP then
 		E.db["datatexts"]["panels"]["LocPlusRightDT"][1] = 'Time'
-		E.db["datatexts"]["panels"]["LocPlusLeftDT"][1] = 'Movement Speed'
+		E.db["datatexts"]["panels"]["LocPlusLeftDT"][1] = 'MovementSpeed'
 		E.DataTexts:UpdatePanelInfo('LocPlusRightDT')
 		E.DataTexts:UpdatePanelInfo('LocPlusLeftDT')
 	end
@@ -2012,7 +2018,7 @@ BUI.installTable = {
 			PluginInstallTitleFrame.text:SetFont(E["media"].normFont, 16, "OUTLINE")
 			PluginInstallFrame.SubTitle:SetFormattedText(L["Welcome to BenikUI version %s, for ElvUI %s."], BUI.Version, E.version)
 			PluginInstallFrame.Desc1:SetText(L["By pressing the Continue button, BenikUI will be applied on your current ElvUI installation.\n\n|cffff8000 TIP: It would be nice if you apply the changes in a new profile, just in case you don't like the result.|r"])
-			PluginInstallFrame.Desc2:SetText(BUI:cOption(L["BenikUI options are marked with light blue color, inside ElvUI options."]))
+			PluginInstallFrame.Desc2:SetText(BUI:cOption(L["BenikUI options are marked with light blue color, inside ElvUI options."], "blue"))
 			PluginInstallFrame.Desc3:SetText(L["Please press the continue button to go onto the next step."])
 			PluginInstallFrame.Option1:Show()
 			PluginInstallFrame.Option1:SetScript("OnClick", function() InstallComplete() end)

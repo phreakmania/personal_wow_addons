@@ -9,7 +9,16 @@ local ICON_QUESTIONMARK = "Interface\\RaidFrame\\ReadyCheck-Waiting"
 if not Altoholic.db.global.Tasks then
     Altoholic.db.global.Tasks = {}
 end
-local tasks = Altoholic.db.global.Tasks
+
+for i = 2, addon:GetOption("UI.Tabs.Grids.Tasks.MaxProfiles") do
+    if not Altoholic.db.global["Tasks"..i] then
+        Altoholic.db.global["Tasks"..i] = {}
+    end
+end
+
+local selectedTaskID = addon:GetOption("UI.Tabs.Grids.Tasks.SelectedProfile")
+if (tostring(selectedTaskID) == "1") then selectedTaskID = "" end
+local tasks = Altoholic.db.global["Tasks"..selectedTaskID]
 
 local function taskPassesLevelFilter(task, character)    
     if not task.MinimumLevel then return true end
@@ -55,13 +64,12 @@ local function isTaskComplete(taskID, character)
     if (task.Category == nil) or (task.Target == nil) then return false end
     
     if task.Category == "Daily Quest" then
-        local completed = false
-        for _, daily in pairs(DataStore:GetDailiesHistory(character)) do
-            if daily.id == task.Target then
-                return true
-            end 
-        end
-        return false
+        --for _, daily in pairs(DataStore:GetDailiesHistory(character)) do
+        --    if daily.id == task.Target then
+        --        return true
+        --    end 
+        --end
+        return DataStore:IsQuestCompletedBy(character, task.Target)
     end
     
     if task.Category == "Dungeon" then
@@ -195,15 +203,38 @@ local function isTaskComplete(taskID, character)
         end
         return false
     end
+    
+    if task.Category == "Rare Spawn" then
+        if DataStore:GetKilledRares(character) then -- backward compatibility with characters saved before the datastore module was added
+            for creatureID, rareData in pairs(DataStore:GetKilledRares(character)) do
+                if task.Target == creatureID then
+                    return true
+                end
+            end
+        end
+        return false
+    end
 end
 
-local function OnDropDownClicked(self)
+local function OnChangeProfile(self, newProfileIndex)
+    addon:SetOption("UI.Tabs.Grids.Tasks.SelectedProfile", newProfileIndex)
+    if (tostring(newProfileIndex) == "1") then newProfileIndex = "" end
+    tasks = Altoholic.db.global["Tasks"..newProfileIndex]
+    addon:ToggleUI()
+    addon:ToggleUI()
+end
+
+local function OnManageClicked(self)
     addon:ToggleUI()
 	AltoTasksOptions:Show()
 end
 
 local function DropDown_Initialize(frame, level)
-	frame:AddButton("Manage", 1, OnDropDownClicked)
+	frame:AddButton("Manage", 1, OnManageClicked)
+    frame:AddTitle("")
+    for i = 1, addon:GetOption("UI.Tabs.Grids.Tasks.MaxProfiles") do
+        frame:AddButtonWithArgs(addon:GetOption("UI.Tabs.Grids.Tasks.Profile"..i.."Name"), nil, OnChangeProfile, i, nil, (i == addon:GetOption("UI.Tabs.Grids.Tasks.SelectedProfile")))
+    end 
 end
 
 local callbacks = {
@@ -226,14 +257,28 @@ local callbacks = {
 			button.Background:SetDesaturated(false)
 			button.Background:SetTexCoord(0, 1, 0, 1)
 			
-			button.Background:SetTexture(GetItemIcon(currentItemID) or ICON_QUESTIONMARK)
+			button.Background:SetTexture(ICON_QUESTIONMARK)
 
 			local text = icons.notReady
 			local vc = 0.25	-- vertex color
 
 			if #tasks ~= 0 then		
 				if taskPassesFilters(dataRowID, character) then
-                    if isTaskComplete(dataRowID, character) then
+                    if tasks and tasks[dataRowID] and (tasks[dataRowID].Category == "Paragon") then
+                        local reputationID = tasks[dataRowID].Target
+                        local status, amount, _, rate =  DataStore:GetReputationInfo(character, DataStore:GetFactionName(reputationID))
+                        if status == "Paragon" then
+                            if amount > 9999 then
+                                button.Background:SetTexture("Interface\\ICONS\\INV_BfA_ParagonCache_7thLegion")
+                                vc = 1.0
+                                text = math.floor(amount/1000).."K"
+                            else
+                                text = math.floor(amount/1000).."K"
+                            end
+                        else
+                            vc = 0.4
+                        end
+                    elseif isTaskComplete(dataRowID, character) then
 					   vc = 1.0
 					   text = icons.ready
 				    else
@@ -246,7 +291,6 @@ local callbacks = {
 
 			button.Background:SetVertexColor(vc, vc, vc)
 			button.Name:SetText(text)
-			button.id = currentItemID
 		end,
 	OnEnter = function(self)  
 		end,

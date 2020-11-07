@@ -11,4 +11,5 @@
 <Include file="libs\LibRecipes-3.0\lib.xml"/>
 <Include file="libs\LibCraftLevels-1.0\LibCraftLevels-1.0.xml"/>
 <Include file="libs\LibCraftCategories-1.0\LibCraftCategories-1.0.xml"/>
+<Include file="libs\LibGatheringNodes\LibGatheringNodes.xml"/>
 </Ui>

@@ -82,8 +82,6 @@ local function Mover_OnMouseUp(self, btn)
         elseif obj and obj.id then
             LibStub( "AceConfigDialog-3.0" ):SelectGroup( "Hekili", "displays", obj.id, obj.id )
             return
-        else
-            print( obj, obj:GetName(), obj.id )
         end
     end
 end
@@ -204,23 +202,26 @@ function ns.StartConfiguration( external )
         if ns.UI.Buttons[ i ][ 1 ] and Hekili.DB.profile.displays[ i ] then
             -- if not Hekili:IsDisplayActive( i ) then v:Show() end
 
-            v:EnableMouse( true )
-            v:SetMovable( true )
-
             v.Backdrop = v.Backdrop or Mixin( CreateFrame( "Frame", v:GetName().. "_Backdrop", UIParent ), BackdropTemplateMixin )
             v.Backdrop:ClearAllPoints()
             
-            local left, right, top, bottom = v:GetPerimeterButtons()
-            if left and right and top and bottom then
-                v.Backdrop:SetPoint( "LEFT", left, "LEFT", -2, 0 )
-                v.Backdrop:SetPoint( "RIGHT", right, "RIGHT", 2, 0 )
-                v.Backdrop:SetPoint( "TOP", top, "TOP", 0, 2 )
-                v.Backdrop:SetPoint( "BOTTOM", bottom, "BOTTOM", 0, -2 )
-            else
-                v.Backdrop:SetWidth( v:GetWidth() + 2 )
-                v.Backdrop:SetHeight( v:GetHeight() + 2 )
-                v.Backdrop:SetPoint( "CENTER", v, "CENTER" )
+            if not v:IsAnchoringRestricted() then
+                v:EnableMouse( true )
+                v:SetMovable( true )
+            
+                local left, right, top, bottom = v:GetPerimeterButtons()
+                if left and right and top and bottom then
+                    v.Backdrop:SetPoint( "LEFT", left, "LEFT", -2, 0 )
+                    v.Backdrop:SetPoint( "RIGHT", right, "RIGHT", 2, 0 )
+                    v.Backdrop:SetPoint( "TOP", top, "TOP", 0, 2 )
+                    v.Backdrop:SetPoint( "BOTTOM", bottom, "BOTTOM", 0, -2 )
+                else
+                    v.Backdrop:SetWidth( v:GetWidth() + 2 )
+                    v.Backdrop:SetHeight( v:GetHeight() + 2 )
+                    v.Backdrop:SetPoint( "CENTER", v, "CENTER" )
+                end
             end
+
 
             v.Backdrop:SetFrameStrata( v:GetFrameStrata() )
             v.Backdrop:SetFrameLevel( v:GetFrameLevel() + 1 )
@@ -330,7 +331,7 @@ function ns.StopConfiguration()
 
     for i, v in pairs( ns.UI.Displays ) do
         v:EnableMouse( false )
-        v:SetMovable( true )
+        if not v:IsAnchoringRestricted() then v:SetMovable( true ) end
         -- v:SetBackdrop( nil )
         if v.Header then
             v.Header:Hide()
@@ -675,8 +676,8 @@ do
 
     local oocRefresh = 1
     local icRefresh = {
-        Primary = 0.5,
-        AOE = 0.5,
+        Primary = 0.1,
+        AOE = 0.2,
         Interrupts = 1,
         Defensives = 1
     }
@@ -806,7 +807,7 @@ do
             self.flashTimer = -1
             self.delayTimer = -1
 
-            self.recTimer = 1
+            self.recTimer = 0.1
             self.alphaCheck = 0.5
 
             self:RefreshCooldowns()
@@ -816,18 +817,21 @@ do
 
         self.refreshTimer = self.refreshTimer - elapsed
 
-        if not Hekili.Pause then
+        if Hekili.freshFrame and not Hekili.Pause then
             local spec = Hekili.DB.profile.specs[ state.spec.id ]
             local throttle = spec.throttleRefresh and ( 1 / spec.maxRefresh ) or ( 1 / 20 )
             local refreshRate = max( throttle, state.combat == 0 and oocRefresh or icRefresh[ self.id ] )
 
-            if self.refreshTimer < 0 or Hekili.freshFrame and ( self.superUpdate and ( self.id == "Primary" or self.id == "AOE" ) or self.criticalUpdate and ( now - self.lastUpdate > throttle ) ) then
+            if self.refreshTimer < 0 or ( self.superUpdate and ( self.id == "Primary" or self.id == "AOE" ) ) or self.criticalUpdate and ( now - self.lastUpdate >= throttle ) then
                 Hekili:ProcessHooks( self.id )
                 self.lastUpdate = now
                 self.criticalUpdate = false
                 self.superUpdate = false
                 self.refreshTimer = refreshRate
+
                 table.wipe( self.eventsTriggered )
+                
+                Hekili.freshFrame = false
             end
         end
 
@@ -903,7 +907,11 @@ do
                             if a.item then
                                 outOfRange = IsItemInRange( a.itemCd or a.item, "target" ) == false
                             else
-                                outOfRange = LSR.IsSpellInRange( a.rangeSpell or a.actualName or a.name, "target" ) == 0
+                                local name = a.rangeSpell or a.actualName or a.name
+
+                                if name then
+                                    outOfRange = LSR.IsSpellInRange( a.rangeSpell or a.actualName or a.name, "target" ) == 0
+                                end
                             end
                         end
                     end
@@ -1399,7 +1407,10 @@ do
         return left, right, top, bottom
     end
 
-    function Display_UpdatePerformance( self, now, used )
+    local function Display_UpdatePerformance( self, now, used )
+        if used == nil then return end        
+        used = used / 1000 -- ms to sec.
+
         if self.combatTime.samples == 0 then
             self.combatTime.fastest = used
             self.combatTime.slowest = used
@@ -1483,12 +1494,31 @@ do
         local border = 2
 
         d:SetSize( scale * ( border + ( conf.primaryWidth or 50 ) ), scale * ( border + ( conf.primaryHeight or 50 ) ) )
-        d:SetPoint( "CENTER", nil, "CENTER", conf.x or 0, conf.y or -225 )
+        --[[ d:SetIgnoreParentScale( true )
+        d:SetScale( UIParent:GetScale() ) ]]
+        d:ClearAllPoints()
+
+        local frame
+
+        --[[ if conf.relativeTo == "CUSTOM" then
+            frame = _G[ conf.customFrame ]
+        elseif conf.relativeTo == "PERSONAL" then
+            frame = C_NamePlate.GetNamePlateForUnit( "player" )
+        end ]]
+
+        if not frame then frame = UIParent end
+
+        d:SetPoint( "CENTER", frame, "CENTER", conf.x or 0, conf.y or -225 )
+        d:SetParent( frame )
+
         d:SetFrameStrata( conf.frameStrata or "MEDIUM" )
         d:SetFrameLevel( conf.frameLevel or ( 10 * d.index ) )
-        d:SetClampedToScreen( true )
-        d:EnableMouse( false )
-        d:SetMovable( true )
+        
+        if not d:IsAnchoringRestricted() then
+            d:SetClampedToScreen( true )
+            d:EnableMouse( false )
+            d:SetMovable( true )
+        end
 
         d.Activate = Display_Activate
         d.Deactivate = Display_Deactivate
@@ -1767,7 +1797,7 @@ do
 
         -- Texture
         if not b.Texture then
-            b.Texture = b:CreateTexture( nil, "LOW" )
+            b.Texture = b:CreateTexture( nil, "ARTWORK" )
             b.Texture:SetTexture( "Interface\\ICONS\\Spell_Nature_BloodLust" )
             b.Texture:SetAllPoints( b )
         end

@@ -18,6 +18,7 @@ local AddonDB_Defaults = {
 		Options = {
 			RequestPlayTime = true,		-- Request play time at logon
 			HideRealPlayTime = false,	-- Hide real play time to client addons (= return 0 instead of real value)
+            HideLoginPlayTime = false,  -- Hide play time from being displayed on login
 		},
 		Characters = {
 			['*'] = {				-- ["Account.Realm.Name"] 
@@ -51,6 +52,7 @@ local AddonDB_Defaults = {
 				guildName = nil,		-- nil = not in a guild, as returned by GetGuildInfo("player")
 				guildRankName = nil,
 				guildRankIndex = nil,
+                guildServer = nil,      -- for guilds on different servers, nil if same server
 			}
 		}
 	}
@@ -75,12 +77,13 @@ local function OnPlayerGuildUpdate()
 	-- however, the value returned here is correct
 	if IsInGuild() then
 		-- find a way to improve this, it's minor, but it's called too often at login
-		local name, rank, index = GetGuildInfo("player")
+		local name, rank, index, realm = GetGuildInfo("player")
 		if name and rank and index then
 			local character = addon.ThisCharacter
 			character.guildName = name
 			character.guildRankName = rank
 			character.guildRankIndex = index
+            character.guildRealm = realm
 		end
 	end
 end
@@ -138,6 +141,19 @@ local function OnPlayerHearthstoneBound(event)
     addon.ThisCharacter.hearthstone = GetBindLocation()
 end
 
+-- hook ChatFrame_DisplayTimePlayed to stop it outputting the /played time if the user selects the option to hide it 
+local requestingTimePlayed = nil
+local original_ChatFrame_DisplayTimePlayed = ChatFrame_DisplayTimePlayed
+ChatFrame_DisplayTimePlayed = function(...)
+	if requestingTimePlayed then
+		requestingTimePlayed = false
+        if GetOption("HideLoginPlayTime") then
+            return
+        end
+	end
+	return original_ChatFrame_DisplayTimePlayed(...)
+end
+
 local function OnTimePlayedMsg(event, totalTime, currentLevelTime)
 	addon.ThisCharacter.played = totalTime
 	addon.ThisCharacter.playedThisLevel = currentLevelTime
@@ -165,7 +181,7 @@ local function _GetCharacterClass(character)
 end
 
 local function _GetColoredCharacterName(character)
-    if not RAID_CLASS_COLORS[character.englishClass].colorStr then return end
+    if (not character.englishClass) or (not RAID_CLASS_COLORS[character.englishClass]) or (not RAID_CLASS_COLORS[character.englishClass].colorStr) then return "" end
 	return format("|c%s%s", RAID_CLASS_COLORS[character.englishClass].colorStr, character.name)
 end
 	
@@ -326,7 +342,7 @@ local function _IsXPDisabled(character)
 end
 	
 local function _GetGuildInfo(character)
-	return character.guildName, character.guildRankName, character.guildRankIndex
+	return character.guildName, character.guildRankName, character.guildRankIndex, character.guildRealm
 end
 
 local function _GetPlayTime(character)
@@ -412,6 +428,7 @@ function addon:OnEnable()
 	addon:SetupOptions()
 	
 	if GetOption("RequestPlayTime") then
+        requestingTimePlayed = true
 		RequestTimePlayed()	-- trigger a TIME_PLAYED_MSG event
 	end
 end

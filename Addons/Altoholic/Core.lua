@@ -4,10 +4,8 @@ _G[addonName] = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceConsole-3.0", "A
 
 local addon = _G[addonName]
 
-addon.VersionNum = GetAddOnMetadata("Altoholic", "Version")
-local pattern = ".*(%d+).*(%d+).*(%d).*(%d%d%d).*"
-local expansionID, patchID, subpatchID, versionID = addon.VersionNum:match(pattern)
-addon.Version = "v"..expansionID.."."..patchID.."."..subpatchID.."."..versionID
+addon.Version = GetAddOnMetadata("Altoholic", "Version")
+if addon.Version == "\064project-version\064" then addon.Version = "Developer" end
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local commPrefix = addonName
@@ -89,6 +87,7 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Summary.ShowLevelDecimals"] = true,					-- display character level with decimals or not
 			["UI.Tabs.Summary.ShowILevelDecimals"] = true,					-- display character level with decimals or not
             --["UI.Tabs.Summary.ExcludeRealms.<Account>.<Realm>"] = true
+            ["UI.Tabs.Summary.ShowLevelTotalAverage"] = nil,                -- Display level totals as their average instead
 			
 			-- ** Character tab options **
 			["UI.Tabs.Characters.ViewBags"] = true,
@@ -134,7 +133,12 @@ local AddonDB_Defaults = {
 			["UI.Tabs.Grids.Garrisons.CurrentStats"] = 1,					-- Current stats (abilities = 1, traits = 2, counters = 3)
 			["UI.Tabs.Grids.Sets.IncludePVE"] = true,							-- Include PVE Sets
 			["UI.Tabs.Grids.Sets.IncludePVP"] = true,							-- Include PVP Sets
-			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack 
+			["UI.Tabs.Grids.Sets.CurrentXPack"] = 1,							-- Current expansion pack
+            ["UI.Tabs.Grids.Rares.CurrentRareSet"] = "ArathiWarfront",
+            ["UI.Tabs.Grids.Tasks.Profile1Name"] = "Profile 1",
+            ["UI.Tabs.Grids.Tasks.MaxProfiles"] = 5,
+            ["UI.Tabs.Grids.Tasks.SelectedProfile"] = 1,
+            ["UI.Tabs.Grids.CurrentAccountRealmScope"] = "Realm", -- whether to default to current account or current realm 
 
 			-- ** Tooltip options **
 			["UI.Tooltip.ShowItemSource"] = true,
@@ -193,6 +197,10 @@ local AddonDB_Defaults = {
 		},
 	}
 }
+
+for i = 2, AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.MaxProfiles"] do
+    AddonDB_Defaults.global.options["UI.Tabs.Grids.Tasks.Profile"..i.."Name"] = "Profile " .. i
+end
 
 addon.Colors = {
 	white	= "|cFFFFFFFF",
@@ -301,14 +309,8 @@ local GuildCommCallbacks = {
 }
 
 local tabList = {}
-local frameToID = {}
 
-function addon:OnInitialize()
-    tabList = addon:GetTabList()
-    for index, name in ipairs(tabList) do
-	   frameToID[name] = index
-    end
-    
+function addon:OnInitialize()    
 	addon.db = LibStub("AceDB-3.0"):New(addonName .. "DB", AddonDB_Defaults)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable(addonName, options)
 
@@ -389,6 +391,7 @@ local function ShowTab(name)
 	local tab = _G[addonName.."Tab" .. name]
 	if tab then
 		tab:Show()
+        AltoholicFrame:TriggerResizeEvents()
 	end
 end
 
@@ -408,6 +411,12 @@ function addon.Tabs:HideAll()
 end
 
 function addon.Tabs:OnClick(index)
+    tabList = addon:GetEnglishTabList()
+    local frameToID = {}
+    for i, name in ipairs(tabList) do
+	   frameToID[name] = i
+    end
+
 	if type(index) == "string" then
 		index = frameToID[index]
 	end
@@ -430,6 +439,9 @@ function addon.Tabs:OnClick(index)
 			if childLevel <= parentLevel then	-- if for any reason a child frame has a level lower or equal to its parent, fix it
 				tabFrame:SetFrameLevel(parentLevel+1)
 			end
+		else
+			-- Now that tabs are added dynamically, the code should never get here anymore
+            addon:Print(format("%s is disabled.", moduleName))
 		end
 	end
 	

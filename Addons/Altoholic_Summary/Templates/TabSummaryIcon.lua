@@ -90,7 +90,7 @@ local locationLabels = {
 	format("%s %s(%s)", L["This realm"], colors.green, L["All accounts"]),
 	format("%s %s(%s)", L["All realms"], colors.green, L["This account"]),
 	format("%s %s(%s)", L["All realms"], colors.green, L["All accounts"]),
-    format("%s %s(%s)", "All realms/accounts", colors.green, "Hide realms"),
+    format("%s %s(%s)", L["All realms/accounts"], colors.green, L["Hide realms"]),
 }
 
 local function RealmsIcon_Initialize(frame, level)
@@ -203,7 +203,7 @@ local function AltoholicOptionsIcon_Initialize(frame, level)
 	
 	frame:AddTitle()
 	frame:AddTitle(OTHER)	
-	frame:AddButton("What's new?", AltoholicWhatsNew, ShowOptionsCategory)
+	frame:AddButton(L["What's new?"], AltoholicWhatsNew, ShowOptionsCategory)
 	frame:AddButton("Getting support", AltoholicSupport, ShowOptionsCategory)
 	frame:AddButton(L["Memory used"], AltoholicMemoryOptions, ShowOptionsCategory)
 	frame:AddButton(HELP_LABEL, AltoholicHelp, ShowOptionsCategory)

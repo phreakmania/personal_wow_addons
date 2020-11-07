@@ -17,6 +17,7 @@
 		<Size x="758" y="447" />
 		<Anchors>
 			<Anchor point="TOPLEFT" />
+            <Anchor point="BOTTOMRIGHT" x="-75" y="35"/>
 		</Anchors>
 		<Layers>
 			<Layer level="OVERLAY">
@@ -33,10 +34,10 @@
 					</Anchors>
 					<Color r="1" g="1" b="1" />
 				</FontString>
-				<FontString parentKey="Status" inherits="GameFontNormal" justifyH="LEFT">
+				<FontString parentKey="Status" inherits="GameFontNormal" justifyH="CENTER">
 					<Size x="320" y="24" />
 					<Anchors>
-						<Anchor point="BOTTOMRIGHT" x="-250" y="13" />
+						<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="AltoholicFrame" x="-50" y="10" />
 					</Anchors>
 					<Color r="1" g="1" b="1" />
 				</FontString>
@@ -61,7 +62,6 @@
 			<!-- Menu Icons -->
 			<Frame parentKey="ClassIcons" inherits="AltoClassIconsContainerTemplate">
 				<KeyValues>
-					<!-- <KeyValue key="numIcons" value="11" type="number" /> -->
 					<KeyValue key="numIcons" value="50" type="number" />
 					<KeyValue key="iconTemplate" value="AltoTabGridsClassIconTemplate" />
 					<KeyValue key="tabName" value="Grids" />
@@ -72,7 +72,7 @@
 			
 			<Button parentKey="Equipment" inherits="AltoTabGridsMenuIconTemplate" id="1">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="240" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.SelectAccount" relativePoint="BOTTOMLEFT" x="30" y="0" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\INV_Chest_Plate04" />
@@ -105,7 +105,7 @@
 			</Button>
             <Button parentKey="Essences" inherits="AltoTabGridsMenuIconTemplate" id="5">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="200" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.Equipment" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="1869493" />
@@ -140,7 +140,7 @@
 
 			<Button parentKey="GarrisonArchitect" inherits="AltoTabGridsMenuIconTemplate" id="9">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="160" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.Essences" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_garrison_blueprints3" />
@@ -179,7 +179,7 @@
             
 			<Button parentKey="Emissaries" inherits="AltoTabGridsMenuIconTemplate" id="12">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="120" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.GarrisonArchitect" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_legion_cache_dreamweavers" />
@@ -217,7 +217,7 @@
             
             <Button parentKey="Callings" inherits="AltoTabGridsMenuIconTemplate" id="18">
 				<Anchors>
-					<Anchor point="BOTTOMLEFT" relativeTo="AltoholicTabGrids" relativePoint="BOTTOMLEFT" x="30" y="80" />
+					<Anchor point="TOPLEFT" relativeKey="$parent.Emissaries" relativePoint="BOTTOMLEFT" x="0" y="-10" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\inv_misc_covenant_renown" />
@@ -232,6 +232,16 @@
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\sanctum_features_missiontable" />
                     <KeyValue key="text" value="COVENANT_MISSIONS_FOLLOWERS" type="global"/>
+				</KeyValues>
+			</Button>
+            
+            <Button parentKey="RareSpawns" inherits="AltoTabGridsMenuIconTemplate" id="20">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.CovenantFollowers" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				</Anchors>
+				<KeyValues>
+					<KeyValue key="iconFile" value="Interface\Icons\INV_Inscription_Trinket_Dragon" />
+                    <KeyValue key="text" value="Rare Spawns"/>
 				</KeyValues>
 			</Button>
             			

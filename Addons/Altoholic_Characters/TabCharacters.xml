@@ -10,9 +10,10 @@
 	</Button>
 	
 	<Frame name="AltoholicTabCharacters" parent="AltoholicFrame" hidden="true">
-		<Size x="758" y="447" />
+		<!--Size x="758" y="447" /-->
 		<Anchors>
 			<Anchor point="TOPLEFT" x="0" y="0" />
+            <Anchor point="BOTTOMRIGHT"/>
 		</Anchors>
 		<Layers>
 			<Layer level="OVERLAY">

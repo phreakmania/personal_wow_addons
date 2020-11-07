@@ -14,6 +14,7 @@ local MODE_CURRENCIES = 5
 local MODE_FOLLOWERS = 6
 local MODE_KEYSTONES = 7
 local MODE_HEARTHSTONE = 8
+local MODE_GEAR = 9
 
 local SKILL_CAP = 900
 local CURRENCY_ID_JUSTICE = 395
@@ -533,7 +534,7 @@ columns["Name"] = {
 
 columns["Level"] = {
 	-- Header
-	headerWidth = 60,
+	headerWidth = 50,
 	headerLabel = L["COLUMN_LEVEL_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_LEVEL_TITLE"],
 	tooltipSubTitle = L["COLUMN_LEVEL_SUBTITLE"],
@@ -577,11 +578,15 @@ columns["Level"] = {
 			addon.Summary:Update()
 		end,
 	GetTotal = function(line) return Characters:GetField(line, "level") end,
+    OnTotalClick = function(frame, button)
+            addon:ToggleOption(nil, "UI.Tabs.Summary.ShowLevelTotalAverage")
+            addon.Summary:Update()
+        end,
 }
 
 columns["RestXP"] = {
 	-- Header
-	headerWidth = 65,
+	headerWidth = 60,
 	headerLabel = L["COLUMN_RESTXP_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_RESTXP_TITLE"],
 	tooltipSubTitle = L["COLUMN_RESTXP_SUBTITLE"],
@@ -598,7 +603,7 @@ columns["RestXP"] = {
 	headerSort = DataStore.GetRestXPRate,
 	
 	-- Content
-	Width = 65,
+	Width = 60,
 	JustifyH = "CENTER",
 	GetText = function(character) 
 		if DataStore:GetCharacterLevel(character) == MAX_PLAYER_LEVEL then
@@ -645,7 +650,7 @@ columns["RestXP"] = {
 
 columns["Money"] = {
 	-- Header
-	headerWidth = 115,
+	headerWidth = 120,
 	headerLabel = L["COLUMN_MONEY_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_MONEY_TITLE"],
 	tooltipSubTitle = L["COLUMN_MONEY_SUBTITLE_"..random(5)],
@@ -730,7 +735,7 @@ columns["AiL"] = {
 
 columns["LastOnline"] = {
 	-- Header
-	headerWidth = 90,
+	headerWidth = 80,
 	headerLabel = L["COLUMN_LASTONLINE_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_LASTONLINE_TITLE"],
 	tooltipSubTitle = L["COLUMN_LASTONLINE_SUBTITLE"],
@@ -790,7 +795,7 @@ columns["BagSlots"] = {
 	
 	-- Content
 	Width = 100,
-	JustifyH = "LEFT",
+	JustifyH = "CENTER",
 	GetText = function(character)
 				if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 					return UNKNOWN
@@ -883,7 +888,7 @@ columns["BankSlots"] = {
 	
 	-- Content
 	Width = 160,
-	JustifyH = "LEFT",
+	JustifyH = "CENTER",
 	GetText = function(character)
 			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 				return UNKNOWN
@@ -982,26 +987,51 @@ columns["FreeBankSlots"] = {
 	GetTotal = function(line) return format("%s%s", colors.white, Characters:GetField(line, "freeBankSlots")) end,
 }
 
-columns["FreeReagentBankSlots"] = {	-- TO DO 
+columns["FreeReagentBankSlots"] = { 
 	-- Header
-	headerWidth = 50,
-	headerLabel = LASTONLINE,
-	-- headerOnClick = function(frame) 
-		-- SortView("FreeReagentBankSlots") 
-	-- end,
-	--headerSort = DataStore.xxx,
+	headerWidth = 80,
+	headerLabel = L["COLUMN_FREEREAGENTBANKSLOTS_TITLE_SHORT"],
+	tooltipTitle = L["COLUMN_FREEREAGENTBANKSLOTS_TITLE"],
+	tooltipSubTitle = L["COLUMN_FREEREAGENTBANKSLOTS_SUBTITLE"],
+	headerOnClick = function(frame)	SortView("FreeReagentBankSlots") end,
+	headerSort = DataStore.GetNumFreeReagentBankSlots,
 	
 	-- Content
-	Width = 50,
+	Width = 80,
 	JustifyH = "CENTER",
 	GetText = function(character)
 			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
 				return 0
 			end
 			
-			-- TO DO : problem to workaround GetContainerNumFreeSlots returns 0 when the bag (-3) is scanned when not at the bank..
+			local numFree = DataStore:GetNumFreeReagentBankSlots(character) or 0
+			local color = ((numFree / 98) <= 0.1) and colors.red or colors.green
 			
-			return 0
+			return format("%s%s|r/%s%s", color, numFree, colors.cyan, 98)
+		end,
+}
+
+columns["FreeVoidStorageSlots"] = {
+	-- Header
+	headerWidth = 120,
+	headerLabel = L["COLUMN_FREEVOIDSTORAGESLOTS_TITLE_SHORT"],
+	tooltipTitle = L["COLUMN_FREEVOIDSTORAGESLOTS_TITLE"],
+	tooltipSubTitle = L["COLUMN_FREEVOIDSTORAGESLOTS_SUBTITLE"],
+	headerOnClick = function(frame)	SortView("FreeVoidStorageSlots") end,
+	headerSort = DataStore.GetNumFreeVoidStorageSlots,
+	
+	-- Content
+	Width = 80,
+	JustifyH = "CENTER",
+	GetText = function(character)
+			if not DataStore:GetModuleLastUpdateByKey("DataStore_Containers", character) then
+				return 0
+			end
+			
+			local numFree = DataStore:GetNumFreeVoidStorageSlots(character) or 0
+			local color = ((numFree / 160) <= 0.1) and colors.red or colors.green
+			
+			return format("%s%s|r/%s%s", color, numFree, colors.cyan, 160)
 		end,
 }
 
@@ -1244,7 +1274,7 @@ columns["ProfArchaeology"] = {
 	Width = 60,
 	JustifyH = "CENTER",
 	GetText = function(character)
-			local rank = DataStore:GetArchaeologyRank(character)
+			local rank = DataStore:GetArchaeologyRank(character) or 0
 			return format("%s%s", GetSkillRankColor(rank), rank)
 		end,
 	OnEnter = function(frame)
@@ -1352,7 +1382,7 @@ columns["Mails"] = {
 			
 			if numExpired > 0 then
 				tt:AddLine(" ")
-				tt:AddLine(format("%s%d %shave expired !", colors.red, numExpired, colors.white))
+				tt:AddLine(format(L["MAIL_HAS_EXPIRED_PATTERN"], colors.red, numExpired, colors.white))
 			end
 			
 			tt:Show()
@@ -1595,9 +1625,9 @@ columns["MissionTableLastVisit"] = {
             
             -- **War Campaign Missions **
             
-			numAvail = DataStore:GetNumAvailableMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0
-			numActive = DataStore:GetNumActiveMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0
-			numCompleted = DataStore:GetNumCompletedMissions(character, LE_FOLLOWER_TYPE_GARRISON_8_0) or 0			
+			numAvail = DataStore:GetNumAvailableMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0
+			numActive = DataStore:GetNumActiveMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0
+			numCompleted = DataStore:GetNumCompletedMissions(character, Enum.GarrisonFollowerType.FollowerType_8_0) or 0			
 			color = colors.green
 			
 			tt:AddLine(L["War Campaign Missions"]) -- Couldn't find a GlobalString for "War Campaign Missions". How long until someone playing in another language complains?
@@ -1742,7 +1772,7 @@ columns["FollowersLV100"] = {
 
 columns["FollowersEpic"] = {
 	-- Header
-	headerWidth = 55,
+	headerWidth = 85,
 	headerLabel = L["COLUMN_FOLLOWERS_RARITY_TITLE_SHORT"],
 	tooltipTitle = L["COLUMN_FOLLOWERS_RARITY_TITLE"],
 	tooltipSubTitle = L["COLUMN_FOLLOWERS_RARITY_SUBTITLE"],
@@ -1750,7 +1780,7 @@ columns["FollowersEpic"] = {
 	headerSort = GetRarityLevel,
 	
 	-- Content
-	Width = 55,
+	Width = 85,
 	JustifyH = "CENTER",
 	GetText = function(character)
 			local numRare = DataStore:GetNumRareFollowers(character) or 0
@@ -1978,11 +2008,17 @@ columns["HighestKeystoneTime"] = {
 		end,
 }
 
+local hearthstoneName = "" 
+local item = Item:CreateFromItemID(6948)
+item:ContinueOnItemLoad(function()
+	hearthstoneName = item:GetItemName()
+end)
+
 columns["BindLocation"] = {
 	-- Header
 	headerWidth = 120,
-	headerLabel = "Hearthstone",
-	tooltipTitle = "Bind Location",
+	headerLabel = hearthstoneName,
+	tooltipTitle = L["Bind Location"],
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("BindLocation") end,
 	headerSort = DataStore.GetHearthstone,
@@ -2001,8 +2037,8 @@ columns["BindLocation"] = {
 columns["ConquestPoints"] = {
 	-- Header
 	headerWidth = 80,
-	headerLabel = "Conquest",
-	tooltipTitle = "Conquest Points",
+	headerLabel = PVP_CONQUEST,
+	tooltipTitle = L["Conquest Points"],
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("ConquestPoints") end,
 	headerSort = DataStore.GetConquestPoints,
@@ -2026,8 +2062,8 @@ columns["ConquestPoints"] = {
 columns["RenownLevel"] = {
 	-- Header
 	headerWidth = 90,
-	headerLabel = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
-	tooltipTitle = GARRISON_TYPE_9_0_LANDING_PAGE_RENOWN_LEVEL:gsub("%%d", ""),
+	headerLabel = COVENANT_SANCTUM_TAB_RENOWN,
+	tooltipTitle = COVENANT_SANCTUM_TAB_RENOWN,
 	tooltipSubTitle = nil,
 	headerOnClick = function() SortView("RenownLevel") end,
 	headerSort = DataStore.GetRenownLevel,
@@ -2047,6 +2083,48 @@ columns["RenownLevel"] = {
 	OnEnter = function(frame)
 		end,
 }
+
+for i = 1, 19 do
+    if i ~= 18 then
+        -- Skip ranged slot
+        columns["Equipment"..i] = {
+        	-- Header
+        	headerWidth = 25,
+        	headerLabel = format(TEXTURE_FONT, addon:GetEquipmentSlotIcon(i), 18, 18),
+        	tooltipTitle = nil,
+        	tooltipSubTitle = nil,
+        	headerOnEnter = function() end,
+        	headerOnClick = function() end,
+        	headerSort = nil,
+        	
+        	-- Content
+        	Width = 25,
+        	JustifyH = "CENTER",
+        	GetText = function(character)
+                    local item = DataStore:GetInventoryItem(character, i)
+        			if item then
+                        return format(TEXTURE_FONT, GetItemIcon(item), 18, 18)
+                    else
+                        return ""
+                    end
+        		end,
+        	OnEnter = function(frame)
+                    local character = frame:GetParent().character
+                    local item = DataStore:GetInventoryItem(character, i)
+                    if item then
+                    	local tt = AltoTooltip
+                    	
+                    	tt:ClearLines()
+                    	tt:SetOwner(frame, "ANCHOR_RIGHT")
+                    	tt:SetHyperlink(item)
+                        tt:Show()
+                    end
+        		end,
+        	OnClick = function(frame, button)
+        		end,
+        }
+    end
+end
 
 local function ColumnHeader_OnEnter(frame)
 	local column = frame.column
@@ -2083,8 +2161,15 @@ local modes = {
     [MODE_CURRENCIES] = { "Name", "Level", "Currency1", "Currency2", "Currency3", "Currency4", "Currency5" },
 	[MODE_FOLLOWERS] = { "Name", "Level", "FollowersLV100", "FollowersEpic", "FollowersLV630", "FollowersLV660", "FollowersLV675", "FollowersItems" },
     [MODE_KEYSTONES] = { "Name", "CurrentKeystoneName", "CurrentKeystoneLevel", "HighestKeystoneName", "HighestKeystoneLevel", "HighestKeystoneTime" },
-    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel" },
+    [MODE_HEARTHSTONE] = { "Name", "BindLocation", "ConquestPoints", "RenownLevel", "FreeReagentBankSlots", "FreeVoidStorageSlots" },
+    [MODE_GEAR] = {"Name", }
 }
+
+for i = 1, 19 do
+    if i ~= 18 then
+        table.insert(modes[MODE_GEAR], "Equipment"..i)
+    end
+end
 
 function ns:SetMode(mode)
 	addon:SetOption("UI.Tabs.Summary.CurrentMode", mode)
@@ -2104,6 +2189,8 @@ function ns:SetMode(mode)
 end
 
 function ns:Update()
+    AltoholicTabSummary_DesMephistoButton:SetText(L["Reset Filters"]) -- TODO: find a better home for this
+    
 	local frame = AltoholicFrameSummary
 	local scrollFrame = frame.ScrollFrame
 	local numRows = scrollFrame.numRows
@@ -2185,7 +2272,7 @@ function ns:Update()
 		end
 	end
 	
-	while rowIndex <= numRows do
+	while rowIndex <= 50 do
 		local rowFrame = scrollFrame:GetRow(rowIndex) 
 		
 		rowFrame:SetID(0)
@@ -2205,3 +2292,5 @@ function addon:AiLTooltip()
 	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (50-59)"), FormatAiL("59-164"))
 	tt:AddDoubleLine(format("%s%s", colors.teal, "Shadowlands (60)"), FormatAiL("165+"))
 end
+
+AltoholicFrame:RegisterResizeEvent("AltoholicFrameSummary", 13, ns)

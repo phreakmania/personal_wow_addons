@@ -41,6 +41,7 @@ local DONATORS = {
 	'JackedNerd',
 	'Jaxx',
 	'Nightwalker559',
+	'Travis J.',
 }
 tsort(DONATORS, function(a, b) return E:StripString(a) < E:StripString(b) end)
 local DONATOR_STRING = tconcat(DONATORS, ", ")
@@ -48,6 +49,7 @@ local DONATOR_STRING = tconcat(DONATORS, ", ")
 local PATRONS = {
 	'thurin',
 	'cry1n',
+	'Beleynn',
 }
 tsort(PATRONS, function(a, b) return E:StripString(a) < E:StripString(b) end)
 local PATRONS_STRING = tconcat(PATRONS, ", ")
@@ -63,9 +65,10 @@ local CODING = {
 	'Merathilis',
 	'NihilisticPandemonium',
 	'Repooc',
-	'Pristie',
+	'Pristie (frFR)',
 	'|cffff005athurin|r',
 	'|TInterface/AddOns/ElvUI/Media/ChatLogos/Hibiscus:15:15:0:0:64:64:5:59:5:59|t Simpy',
+	'Cara (ptBR)',
 }
 tsort(CODING, function(a, b) return E:StripString(a) < E:StripString(b) end)
 local CODING_STRING = tconcat(CODING, ", ")
@@ -134,17 +137,12 @@ local function Info()
 	E.Options.args.benikui.args.info = {
 		order = 2000,
 		type = 'group',
-		name = L['Information'],
+		name = BUI:cOption(L['Information'], "blue"),
 		args = {
-			name = {
-				order = 1,
-				type = 'header',
-				name = BUI:cOption(L['Information']),
-			},
 			support = {
 				order = 2,
 				type = 'group',
-				name = BUI:cOption(L['Support']),
+				name = BUI:cOption(L['Support'], "blue"),
 				guiInline = true,
 				args = {
 					tukui = {
@@ -170,7 +168,7 @@ local function Info()
 			download = {
 				order = 3,
 				type = 'group',
-				name = BUI:cOption(L['Download']),
+				name = BUI:cOption(L['Download'], "blue"),
 				guiInline = true,
 				args = {
 					tukui = {
@@ -196,7 +194,7 @@ local function Info()
 			coding = {
 				order = 4,
 				type = 'group',
-				name = BUI:cOption(L['Coding']),
+				name = BUI:cOption(L['Coding'], "blue"),
 				guiInline = true,
 				args = {
 					str = {
@@ -210,7 +208,7 @@ local function Info()
 			testing = {
 				order = 5,
 				type = 'group',
-				name = BUI:cOption(L['Testing & Inspiration']),
+				name = BUI:cOption(L['Testing & Inspiration'], "blue"),
 				guiInline = true,
 				args = {
 					test = {
@@ -224,7 +222,7 @@ local function Info()
 			donors = {
 				order = 6,
 				type = 'group',
-				name = BUI:cOption(L['Donations']),
+				name = BUI:cOption(L['Donations'], "blue"),
 				guiInline = true,
 				args = {
 					patreon = {
@@ -250,7 +248,7 @@ local function Info()
 			addons = {
 				order = 7,
 				type = 'group',
-				name = BUI:cOption(L['My other Addons']),
+				name = BUI:cOption(L['My other Addons'], "blue"),
 				guiInline = true,
 				args = {
 					locplus = {

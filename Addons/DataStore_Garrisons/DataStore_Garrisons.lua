@@ -35,12 +35,14 @@ local AddonDB_Defaults = {
 		},
 		Options = {
 			ReportUncollected = false,			-- Report uncollected resources
-			ReportLevel = 400,
+			ReportLevel = 900,
+            ReportLevelLowCap = 400,
 		},
 		Characters = {
 			['*'] = {				-- ["Account.Realm.Name"] 
 				lastUpdate = nil,
 				lastResourceCollection = nil,
+                hasUpgradedResourceCollection = nil,
 				numFollowers = 0,
 				numFollowersAtLevel100 = 0,
 				numFollowersAtiLevel615 = 0,
@@ -205,28 +207,37 @@ local function GetOption(option)
 	return addon.db.global.Options[option]
 end
 
-local function GetNumUncollectedResources(from)
+local function GetNumUncollectedResources(from, character)
 	-- no known collection time (alt never logged in) .. return 0
 	if not from then return 0 end
 	
 	local age = time() - from
 	local resources = math.floor(age / 600)		-- 10 minutes = 1 resource
 	
-	-- cap at 500
-	if resources > 500 then
-		resources = 500
-	end
+	-- cap at 500/1000
+    if character.hasUpgradedResourceCollection then
+        if resources > 1000 then
+            resources = 1000
+        end
+    else
+	   if resources > 500 then
+		  resources = 500
+	   end
+    end
 	return resources
 end
 
 local function CheckUncollectedResources()
 	local account, realm, name
 	local num
-	local reportLevel = GetOption("ReportLevel")
 	
 	for key, character in pairs(addon.db.global.Characters) do
+    	local reportLevel = GetOption("ReportLevel")
+        if not character.hasUpgradedResourceCollection then
+            reportLevel = GetOption("ReportLevelLowCap")
+        end
 		account, realm, name = strsplit(".", key)
-		num = GetNumUncollectedResources(character.lastResourceCollection)
+		num = GetNumUncollectedResources(character.lastResourceCollection, character)
 		if name and num >= reportLevel then
 			addon:Print(format(L["UNCOLLECTED_RESOURCES_ALERT"], name, num))
 		end
@@ -313,6 +324,10 @@ end
 
 -- *** Scanning functions ***
 local function ScanBuildings()
+    if C_QuestLog.IsQuestFlaggedCompleted(37485) then
+        addon.ThisCharacter.hasUpgradedResourceCollection = true
+    end
+        
 	local plots = C_Garrison.GetPlots(Enum.GarrisonFollowerType.FollowerType_6_0)
 
 	-- to avoid deleting previously saved data when the game is not ready to deliver information

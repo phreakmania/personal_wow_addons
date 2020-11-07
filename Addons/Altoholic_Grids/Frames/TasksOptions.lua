@@ -8,8 +8,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 AltoTasksOptionsTextTask:SetText(L["Task"]..":")
 AltoTasksOptionsTextNewTask:SetText(L["New"]..":")
 AltoTasksOptionsTextTaskType:SetText(L["Task Type"]..":")
-AltoTasksOptionsTextExpansionName:SetText(L["Expansion"]..":")
-AltoTasksOptionsTextTaskTarget:SetText(L["Target"]..":")
+AltoTasksOptionsTextExpansionName:SetText(EXPANSION_FILTER_TEXT..":")
+AltoTasksOptionsTextTaskTarget:SetText(MINIMAP_TRACKING_TARGET..":")
 AltoTasksOptionsTextMinimumLevel:SetText(L["Minimum Level"]..":")
 AltoTasksOptionsTextFaction:SetText(L["FILTER_FACTIONS"]..":")
 AltoTasksOptionsTextFootnote:SetText("For instructions, check this page: "..colors.green.."https://github.com/teelolws/Altoholic-Retail/wiki/Grids-Tasks-Manual")
@@ -26,14 +26,27 @@ UIDropDownMenu_SetWidth(AltoTasksOptions_TaskNameDropdown, 200, 0)
 if not Altoholic.db.global.Tasks then
     Altoholic.db.global.Tasks = {}
 end
-local tasks = Altoholic.db.global.Tasks
+
+-- Update: 30/september/2020
+-- As I am adding a "profile" system, the data structure needs to be altered a bit
+-- To maintain backward compatibility, I will now continue to use db.global.Tasks for Profile 1
+-- Profile 2 and 3 and so on will now use db.global.Tasks2, .Tasks3, etc
+for i = 2, addon:GetOption("UI.Tabs.Grids.Tasks.MaxProfiles") do
+    if not Altoholic.db.global["Tasks"..i] then
+        Altoholic.db.global["Tasks"..i] = {}
+    end
+end
+
+local selectedTaskID = addon:GetOption("UI.Tabs.Grids.Tasks.SelectedProfile")
+if (tostring(selectedTaskID) == "1") then selectedTaskID = "" end
+local tasks = Altoholic.db.global["Tasks"..selectedTaskID]
 local currentTask = nil
 
 -- Data Structure:
 -- array Tasks
 -- > Name = STRING
 -- > ID = NUMBER UNIQUE PRIMARY KEY
--- > Category = ENUM {Daily Quest / Dungeon / Raid / Dungeon Boss / Raid Boss / Profession Cooldown / Rare Spawn}
+-- > Category = ENUM {Daily Quest / Dungeon / Raid / Dungeon Boss / Raid Boss / Profession Cooldown / Rare Spawn / Paragon}
 -- > Expansion = ENUM {Classic / TBC / WOTLK / Cataclysm / MOP / WOD / Legion / BFA / Shadowlands}
 -- > Target = NUMBER variable {instanceID / questID / bossID / recipeID}
 -- > (INTERNAL) Difficulty = ENUM {heroic / mythic} - for dungeons only
@@ -117,6 +130,18 @@ local function TaskTargetDropdown_SetSelectedWorldBoss(self, bossID, bossName)
     UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, bossName)
     
     currentTask.Target = bossName
+end
+
+local function TaskTargetDropdown_SetSelectedRareSpawn(self, creatureID, rareName)
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, rareName)
+    
+    currentTask.Target = creatureID
+end
+
+local function TaskTargetDropdown_SetSelectedParagon(self, reputationID, reputationName)
+    UIDropDownMenu_SetText(AltoTasksOptions_TaskTargetDropdown, reputationName)
+    
+    currentTask.Target = reputationID
 end
 
 local raidDifficultyIDs = {
@@ -365,6 +390,30 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             UIDropDownMenu_AddButton(info)
         end
         
+        for questID in pairs(DataStore:GetRegularZoneQuests()) do
+            if DataStore:IsQuestCompletedBy(DataStore:GetCharacter(), questID) then
+                a = true
+                local info = UIDropDownMenu_CreateInfo()
+                info.text = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                info.func = TaskTargetDropdown_SetSelectedDailyQuest
+                info.arg1 = questID
+                info.arg2 = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                UIDropDownMenu_AddButton(info)
+            end
+        end
+        
+        for questID in pairs(DataStore:GetManuallyTrackedQuests()) do
+            if DataStore:IsQuestCompletedBy(DataStore:GetCharacter(), questID) then
+                a = true
+                local info = UIDropDownMenu_CreateInfo()
+                info.text = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                info.func = TaskTargetDropdown_SetSelectedDailyQuest
+                info.arg1 = questID
+                info.arg2 = C_QuestLog.GetTitleForQuestID(questID) or "(Loading...)"
+                UIDropDownMenu_AddButton(info)
+            end
+        end
+        
         if not a then
             print("Altoholic: The Daily Quest dropdown will only list Daily Quests you have completed today on the character you are currently playing.")
         end
@@ -409,6 +458,56 @@ local function TaskTargetDropdown_Opened(frame, level, menuList)
             print("Altoholic: The World Bosses dropdown will only list bosses you have actually killed this week on the character you are currently playing.")
         end
     end
+    
+    if category == "Rare Spawn" then
+        if level == 1 then    
+            -- Get all the rare spawn zone names
+            local rares = DataStore:GetRareList()
+            for _, zoneList in pairs(rares) do
+                local zoneName = zoneList[1]
+                local zoneDetails = zoneList[2]
+                local frequency = zoneList[3]
+                local info = UIDropDownMenu_CreateInfo()
+                info.hasArrow = true
+                info.text = zoneName
+                info.menuList = zoneDetails
+                UIDropDownMenu_AddButton(info)
+            end
+        else
+            local zoneDetails = menuList
+            for _, rareDetails in pairs(zoneDetails) do
+                local creatureID = rareDetails[1]
+                local questID = rareDetails[2]
+                local allianceQuestID = rareDetails[3]
+                local hordeQuestID = rareDetails[4]
+                local creatureName = rareDetails[5]
+                local info = UIDropDownMenu_CreateInfo()
+                info.func = TaskTargetDropdown_SetSelectedRareSpawn
+                info.arg1 = creatureID
+                info.arg2 = creatureName
+                info.text = creatureName
+                UIDropDownMenu_AddButton(info, level)
+            end
+        end
+    end
+    
+    if category == "Paragon" then
+        local paragons = {
+                    ["Legion"] = {1900, 1883, 1828, 1948, 1859, 1894, 2045, 2165, 2170},
+                    ["BFA"] = {2159, 2160, 2161, 2162, 2400, 2395, 2157, 2103, 2156, 2158, 2373, 2164, 2163, 2391, 2415, 2417},
+                    ["Shadowlands"] = {2410, 2422, 2413, 2407},
+                }
+        paragons = paragons[expansion]
+        if not paragons then return end
+        for _, reputationID in pairs(paragons) do
+            local info = UIDropDownMenu_CreateInfo()
+            info.func = TaskTargetDropdown_SetSelectedParagon
+            info.arg1 = reputationID
+            info.arg2 = DataStore:GetFactionName(reputationID)
+            info.text = DataStore:GetFactionName(reputationID)
+            UIDropDownMenu_AddButton(info)
+        end 
+    end
 end
 
 -- Converts the targetID to its associated string, based on the category
@@ -439,6 +538,14 @@ local function getCurrentTargetName()
     end
     
     if category == "World Boss" then
+        return targetID
+    end
+    
+    if category == "Rare Spawn" then
+        return targetID
+    end
+    
+    if category == "Paragon" then
         return targetID
     end        
 end
@@ -489,7 +596,7 @@ local function TaskTypeDropdown_SetSelected(self, categoryName)
     
     -- Daily Quests, Profession Cooldowns, and World Bosses don't need an expansion. 
     -- So, clear the expansion, disable it, and enable the target dropdown
-    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") or (categoryName == "World Boss") then
+    if (categoryName == "Daily Quest") or (categoryName == "Profession Cooldown") or (categoryName == "World Boss") or (categoryName == "Rare Spawn") then
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_SetText(AltoTasksOptions_TaskExpansionDropdown, "")
         currentTask.Expansion = nil
@@ -512,7 +619,7 @@ end
 local function TaskTypeDropdown_Opened(frame, level, menuList)
     local currentTaskType = currentTask.Category
     
-    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss"}
+    local categories = {"Daily Quest", "Dungeon", "Raid", "Dungeon Boss", "Raid Boss", "Profession Cooldown", "World Boss", "Rare Spawn", "Paragon"}
     
     for _, category in pairs(categories) do
         local info = UIDropDownMenu_CreateInfo()
@@ -569,7 +676,7 @@ local function TaskNameDropdown_SetSelected(self, id)
 
     -- Target Dropdown should only be enabled if there is a category and expansion selected
     -- OR the selected category is a category that doesn't require an expansion
-    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown") or currentTask.Category == "World Boss") then 
+    if currentTask.Category and ((currentTask.Category == "Daily Quest") or (currentTask.Category == "Profession Cooldown") or (currentTask.Category == "World Boss") or (currentTask.Category == "Rare Spawn")) then 
         UIDropDownMenu_DisableDropDown(AltoTasksOptions_TaskExpansionDropdown)
         UIDropDownMenu_EnableDropDown(AltoTasksOptions_TaskTargetDropdown)
     elseif currentTask.Category and currentTask.Expansion then

@@ -77,6 +77,11 @@ local function EnableIcon(frame)
 	frame.Icon:SetDesaturated(false)
 end
 
+local function DisableIcon(frame)
+    frame:Disable()
+    frame.Icon:SetDesaturated(true)
+end
+
 local DDM_Add = addon.Helpers.DDM_Add
 local DDM_AddTitle = addon.Helpers.DDM_AddTitle
 local DDM_AddCloseMenu = addon.Helpers.DDM_AddCloseMenu
@@ -111,6 +116,8 @@ function ns:ViewCharInfo(index)
 	HideAll()
 	ns:SetMode(index)
 	ns:ShowCharInfo(index)
+    --AltoholicFrame:TriggerResizeEvents()
+    ns:ShowCharInfo(index)
 end
 
 function ns:ShowCharInfo(view)
@@ -121,7 +128,7 @@ function ns:ShowCharInfo(view)
         
 	elseif view == VIEW_QUESTS then
 		AltoholicTabCharacters.QuestLog:Update()
-        
+        AltoholicTabCharacters.QuestLog:Show()
 	elseif view == VIEW_TALENTS then
 		AltoholicTabCharacters.Talents:Update()
         
@@ -151,6 +158,7 @@ function ns:ShowCharInfo(view)
 
 	elseif view == VIEW_PROFESSION then
 		AltoholicTabCharacters.Recipes:Update()
+        AltoholicTabCharacters.Recipes:Show()
 				
 	elseif view == VIEW_GARRISONS then
 		AltoholicTabCharacters.GarrisonMissions:Update()
@@ -243,13 +251,13 @@ local function OnCharacterChange(self)
 	
 	local menuIcons = parent.MenuIcons
 	EnableIcon(menuIcons.BagsIcon)
-	EnableIcon(menuIcons.QuestsIcon)
-	EnableIcon(menuIcons.TalentsIcon)
-	EnableIcon(menuIcons.AuctionIcon)
-	EnableIcon(menuIcons.MailIcon)
-	EnableIcon(menuIcons.SpellbookIcon)
-	EnableIcon(menuIcons.ProfessionsIcon)
-	EnableIcon(menuIcons.GarrisonIcon)
+	if DataStore_Quests then EnableIcon(menuIcons.QuestsIcon) else DisableIcon(menuIcons.QuestsIcon) end
+	if DataStore_Talents then EnableIcon(menuIcons.TalentsIcon) else DisableIcon(menuIcons.TalentsIcon) end
+	if DataStore_Auctions then EnableIcon(menuIcons.AuctionIcon) else DisableIcon(menuIcons.AuctionIcon) end
+	if DataStore_Mails then EnableIcon(menuIcons.MailIcon) else DisableIcon(menuIcons.MailIcon) end
+	if DataStore_Spells then EnableIcon(menuIcons.SpellbookIcon) else DisableIcon(menuIcons.SpellbookIcon) end
+	if DataStore_Crafts then EnableIcon(menuIcons.ProfessionsIcon) else DisableIcon(menuIcons.ProfessionsIcon) end
+	if DataStore_Garrisons then EnableIcon(menuIcons.GarrisonIcon) else DisableIcon(menuIcons.GarrisonIcon) end
 	
 	DropDownList1:Hide()
 	
@@ -353,6 +361,7 @@ local function OnProfessionCategoryChange(self)
 	recipes:SetMainCategory(tonumber(mainCategory))
 	recipes:SetSubCategory(tonumber(subCategory))
 	recipes:Update()
+    recipes:Show()
 end
 
 local function OnShowLearned(self)
@@ -406,10 +415,10 @@ end
 
 local function GetCharacterLoginText(character)
 	local last = DataStore:GetLastLogout(character)
-	local _, _, name = strsplit(".", character)
+	local _, realm, name = strsplit(".", character)
 	
 	if last then
-		if name == UnitName("player") then
+		if (realm == GetRealmName()) and (name == UnitName("player")) then
 			last = colors.green..GUILD_ONLINE_LABEL
 		else
 			last = format("%s: %s", LASTONLINE, colors.yellow..date("%m/%d/%Y %H:%M", last))
@@ -422,7 +431,9 @@ end
 
 -- ** Menu Icons **
 local function CharactersIcon_Initialize(self, level)
-	
+	local currentCharacterKey = ns:GetAltKey()
+    local currentAccount, currentRealm, currentName = strsplit(".", currentCharacterKey)
+    
 	if level == 1 then
 		DDM_AddTitle(L["Characters"])
 		
@@ -433,7 +444,7 @@ local function CharactersIcon_Initialize(self, level)
 
 				info.text = realm
 				info.hasArrow = 1
-				info.checked = nil
+				info.checked = (currentRealm == realm)
 				info.value = format("%s.%s", account, realm)
 				info.func = nil
 				UIDropDownMenu_AddButton(info, level)
@@ -451,7 +462,7 @@ local function CharactersIcon_Initialize(self, level)
 		end
 		table.sort(nameList)
 		
-		local currentCharacterKey = ns:GetAltKey()
+
 		for _, character in ipairs(nameList) do
 			
 			local info = UIDropDownMenu_CreateInfo()
@@ -461,7 +472,6 @@ local function CharactersIcon_Initialize(self, level)
 			info.func		= OnCharacterChange
 			info.icon		= nil
 			info.checked	= (currentCharacterKey == character)
-			
 			UIDropDownMenu_AddButton(info, level)
 		end
 	end
@@ -496,6 +506,10 @@ local function QuestsIcon_Initialize(self, level)
 	if not currentCharacterKey then return end
 	
 	local questLog = AltoholicTabCharacters.QuestLog
+    
+    if not DataStore_Quests then
+        return
+    end
 	
 	DDM_AddTitle(format("%s / %s", QUESTS_LABEL, DataStore:GetColoredCharacterName(currentCharacterKey)))
 	DDM_Add(ALL, 0, OnQuestHeaderChange, nil, (questLog:GetCategory() == 0))
@@ -904,6 +918,13 @@ function ns:OnLoad()
 	local menuIcons = parent.MenuIcons
 	menuIcons.CharactersIcon.Icon:SetTexture(addon:GetCharacterIcon())
 	menuIcons.BagsIcon.Icon:SetTexture(bagIcon)
+    if DataStore_Quests then EnableIcon(menuIcons.QuestsIcon) else DisableIcon(menuIcons.QuestsIcon) end
+	if DataStore_Talents then EnableIcon(menuIcons.TalentsIcon) else DisableIcon(menuIcons.TalentsIcon) end
+	if DataStore_Auctions then EnableIcon(menuIcons.AuctionIcon) else DisableIcon(menuIcons.AuctionIcon) end
+	if DataStore_Mails then EnableIcon(menuIcons.MailIcon) else DisableIcon(menuIcons.MailIcon) end
+	if DataStore_Spells then EnableIcon(menuIcons.SpellbookIcon) else DisableIcon(menuIcons.SpellbookIcon) end
+	if DataStore_Crafts then EnableIcon(menuIcons.ProfessionsIcon) else DisableIcon(menuIcons.ProfessionsIcon) end
+	if DataStore_Garrisons then EnableIcon(menuIcons.GarrisonIcon) else DisableIcon(menuIcons.GarrisonIcon) end
 	
 	addon:RegisterMessage("DATASTORE_RECIPES_SCANNED")
 	addon:RegisterMessage("DATASTORE_QUESTLOG_SCANNED")

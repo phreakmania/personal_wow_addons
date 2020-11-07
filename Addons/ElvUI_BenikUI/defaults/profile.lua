@@ -232,12 +232,16 @@ P['benikuiSkins'] = {
 		['bigwigs'] = true,
 		['zygor'] = true,
 		['immersion'] = true,
+		['allthethings'] = true,
+		['tinyinspect'] = true,
+		['arkinventory'] = true,
 	},
 
 	['variousSkins'] = {
 		['talkingHead'] = true,
 		['storyline'] = true,
 		['inflight'] = true,
+		['kt'] = true,
 	},
 }
 
@@ -303,6 +307,7 @@ P['dashboards'] = {
 		['style'] = true,
 		['transparency'] = true,
 		['backdrop'] = true,
+		['mouseover'] = false,
 		['chooseSystem'] = {
 			['FPS'] = true,
 			['MS'] = true,
@@ -341,7 +346,7 @@ P['dashboards'] = {
 		['enableReputations'] = true,
 		['combat'] = true,
 		['mouseover'] = false,
-		['width'] = 150,
+		['width'] = 200,
 		['style'] = true,
 		['transparency'] = true,
 		['backdrop'] = true,

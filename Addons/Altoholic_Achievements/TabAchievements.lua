@@ -105,8 +105,6 @@ addon:Controller("AltoholicUI.TabAchievements", {
 				-- end
 			-- end
 		-- end
-		
-		
 	end,
 	Update = function(frame)
 		local account, realm = frame.SelectAccount:GetCurrentAccount()

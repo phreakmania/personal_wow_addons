@@ -2,7 +2,7 @@
 ## Title: Altoholic_Grids
 ## Notes: Altoholic's Grids Tab
 ## Author: Thaoky + Teelo
-## Version: 8.3.5-008
+## Version: 9.0.1-026
 ## Dependencies: Altoholic, DataStore, DataStore_Characters
 ## LoadOnDemand: 1
 ## X-Category: Interface Enhancements

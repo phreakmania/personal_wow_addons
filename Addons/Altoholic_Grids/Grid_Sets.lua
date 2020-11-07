@@ -156,7 +156,7 @@ local TransmogSets = {
 		{ setID = 253, tier = 15, isPVP = true },		-- Season 15 H
 		{ setID = 1079, tier = 15, isPVP = true },	-- Season 15 A
 		{ setID = 1080, tier = 15, isPVP = true },	-- Season 15 H
-        { setID = 1443, tier = "/"}                 -- Pandaria Challenge Dungeons
+        --(unobtainable){ setID = 1443, tier = "/"}                 -- Pandaria Challenge Dungeons
 	},
 	{	-- [6] Warlords of Draenor
 		{ setID = 520, tier = 17 },			-- Blackrock Foundry
@@ -195,7 +195,7 @@ local TransmogSets = {
 		{ setID = 174, tier = "/" },			-- Trial of Valor
 		{ setID = 172, tier = "/" },			-- Trial of Valor
 		{ setID = 171, tier = "/" },			-- Trial of Valor
-		{ setID = 173, tier = "/" },			-- Trial of Valor
+		--(unobtainable){ setID = 173, tier = "/" },			-- Trial of Valor
 		{ setID = 1323, tier = 20 },			-- Tomb of Sargeras
 		{ setID = 1321, tier = 20 },			-- Tomb of Sargeras
 		{ setID = 1324, tier = 20 },			-- Tomb of Sargeras

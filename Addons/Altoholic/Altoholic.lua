@@ -12,8 +12,6 @@ local LR = LibStub("LibRecipes-3.0")
 
 local THIS_ACCOUNT = "Default"
 
-local migrateAlert
-
 local function InitLocalization()
 	-- this function's purpose is to initialize the text attribute of widgets created in XML.
 	-- in versions prior to 3.1.003, they were initialized through global constants named XML_ALTO_???
@@ -401,43 +399,11 @@ end
 function addon:OnShow()
 	SetPortraitTexture(AltoholicFramePortrait, "player")
 	
-	--if not addon.Tabs.current then
-		--addon.Tabs:OnClick("Summary")
-		--local mode = addon:GetOption("UI.Tabs.Summary.CurrentMode")
-        --AltoholicTabSummary["MenuItem"..mode]:Item_OnClick()
-	--end
-    
-    
-    --
-    -- If you want to get rid of the textbox I added and really really don't want to migrate to my project, just delete the rest of the code in this function, and uncomment the code above.
-    --
-    
-    migrateAlert = migrateAlert or CreateFrame("Button", "AltoholicMigrateAlert", AltoholicFrame, "UIPanelButtonTemplate")
-
-    migrateAlert:SetSize(520, 80)
-    migrateAlert:SetPoint("CENTER", 40, 0)
-    migrateAlert:SetText("Altoholic has moved!\nTo update Altoholic for Shadowlands, please switch projects to 'Altoholic-Retail'.\nYou can find it at "..colors.green.."https://www.curseforge.com/wow/addons/altoholic-retail|r\n or https://github.com/teelolws/Altoholic-Retail.")
-    
-    migrateAlert:SetScript("OnClick", function() 
-        StaticPopupDialogs["ALTO_REDIRECT"] = {
-            text = "Copy this link:",
-            button1 = "Done",
-            button2 = "Cancel",
-            OnAccept = function()
-            end,
-            timeout = 0,
-            whileDead = true,
-            hideOnEscape = true,
-            OnShow = function (self, data)
-                self.editBox:SetText("https://www.curseforge.com/wow/addons/altoholic-retail")
-                self.editBox:HighlightText()
-            end,
-            hasEditBox = true
-        }
-        StaticPopup_Show ("ALTO_REDIRECT")
-    end)
-    
-    migrateAlert:Enable()
+	if not addon.Tabs.current then
+		addon.Tabs:OnClick("Summary")
+		local mode = addon:GetOption("UI.Tabs.Summary.CurrentMode")
+		AltoholicTabSummary["MenuItem"..mode]:Item_OnClick()
+	end
 end
 
 
@@ -482,7 +448,7 @@ end
 
 function addon:Item_OnClick(frame, button)
 	if button ~= "LeftButton" or not frame.id then return end
-
+	
 	local link = frame.link
 	
 	if not link then
@@ -586,8 +552,14 @@ function addon:GetMoneyString(copper, color, noTexture)
 		silver = format("%s%s%s%s", color, silver, "|cFFC7C7CF", SILVER_AMOUNT_SYMBOL)
 		gold = format("%s%s%s%s", color, gold, colors.gold, GOLD_AMOUNT_SYMBOL)
 	else
-		copper = color..format(COPPER_AMOUNT_TEXTURE, copper, 13, 13)
-		silver = color..format(SILVER_AMOUNT_TEXTURE, silver, 13, 13)
+        if copper < 10 then copper = "0"..copper end 
+        if silver < 10 then silver = "0"..silver end
+        local pattern = COPPER_AMOUNT_TEXTURE
+        pattern = pattern:gsub("%%d", "%%s")
+        copper = color..format(pattern, copper, 13, 13)
+        pattern = COPPER_AMOUNT_TEXTURE
+        pattern = pattern:gsub("%%d", "%%s") 
+        silver = color..format(pattern, silver, 13, 13)
 		gold = color..format(GOLD_AMOUNT_TEXTURE_STRING, BreakUpLargeNumbers(gold), 13, 13)
 	end
 	return format("%s %s %s", gold, silver, copper)
@@ -603,6 +575,10 @@ function addon:GetTimeString(seconds)
 	seconds = mod(seconds, 3600)
 	local minutes = floor(seconds / 60);
 	seconds = mod(seconds, 60)
+    
+    if seconds < 10 then seconds = "0"..seconds end
+    if minutes < 10 then minutes = "0"..minutes end
+    if hours < 10 then hours = "0"..hours end
 
 	return format("%s%s|rd %s%s|rh %s%s|rm", colors.white, days, colors.white, hours, colors.white, minutes)
 end
@@ -857,7 +833,7 @@ local slotNames = {
 	[15] = INVTYPE_WEAPONMAINHAND,
 	[16] = INVTYPE_WEAPONOFFHAND,
 	[17] = INVTYPE_SHIELD,
-	[18] = INVTYPE_RANGED
+	[18] = INVTYPE_TABARD,
 }
 
 local slotTypeInfo = {
@@ -878,7 +854,6 @@ local slotTypeInfo = {
 	{ color = colors.classHunter, name = INVTYPE_CLOAK },
 	{ color = colors.yellow, name = INVTYPE_WEAPONMAINHAND },
 	{ color = colors.yellow, name = INVTYPE_WEAPONOFFHAND },
-	{ color = colors.classHunter, name = INVTYPE_RANGED },
 	{ color = colors.white, name = INVTYPE_TABARD }
 }
 
@@ -902,3 +877,5 @@ end
 function ns:GetInventoryTypeName(inv)
 	return slotNames[ inventoryTypes[inv] ]
 end
+
+Item:CreateFromItemID(6948)

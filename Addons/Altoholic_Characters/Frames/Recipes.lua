@@ -56,7 +56,9 @@ local function SetStatus(character, professionName, mainCategory, subCategory, n
 	end
 
 	local status = format("%s|r / %s (%d %s)", DataStore:GetColoredCharacterName(character), text, numRecipes, TRADESKILL_SERVICE_LEARN)
-	AltoholicTabCharacters.Status:SetText(status)
+	if AltoholicFrameRecipes:IsVisible() then
+        AltoholicTabCharacters.Status:SetText(status)
+    end
 end
 
 local function RecipePassesColorFilter(color)
@@ -136,33 +138,45 @@ addon:Controller("AltoholicUI.Recipes", {
 	SetCurrentColor = function(frame, color) currentColor = color end,
 	GetCurrentColor = function(frame) return currentColor end,
 	GetRecipeColorName = function(frame, index) return RecipeColors[index]..RecipeColorNames[index] end,
-
+	OnBind = function(frame)
+        AltoholicFrame:RegisterResizeEvent("AltoholicFrameRecipes", 8, AltoholicFrameRecipes)
+	end,
 	Update = function(frame)
-		local character = addon.Tabs.Characters:GetAltKey()
-		local recipeList = GetRecipeList(character, currentProfession, mainCategory, subCategory)
-		
-		SetStatus(character, currentProfession, mainCategory, subCategory, #recipeList)
-	
-		local scrollFrame = frame.ScrollFrame
-		local numRows = scrollFrame.numRows
-		local offset = scrollFrame:GetOffset()
-
-		for rowIndex = 1, numRows do
-			local rowFrame = scrollFrame:GetRow(rowIndex)
-			local line = rowIndex + offset
-			
-			if line <= #recipeList then	-- if the line is visible
-				local color, recipeID, isLearned, recipeRank, totalRanks = DataStore:GetRecipeInfo(recipeList[line])
-				
-				rowFrame:Update(currentProfession, recipeID, RecipeColors[color], isLearned, recipeRank, totalRanks)
-				rowFrame:Show()
-			else
-				rowFrame:Hide()
-			end
-		end
-
-		scrollFrame:Update(#recipeList)
-		frame:Show()
+        frame = frame or AltoholicFrameRecipes
+    	local character = addon.Tabs.Characters:GetAltKey()
+        if not currentProfession then
+            for rowIndex = 1, 18 do
+                frame.ScrollFrame:GetRow(rowIndex):Hide()
+            end
+            return
+        end
+        local recipeList = GetRecipeList(character, currentProfession, mainCategory, subCategory)
+    
+    	SetStatus(character, currentProfession, mainCategory, subCategory, #recipeList)
+    
+    	local scrollFrame = frame.ScrollFrame
+    	local numRows = scrollFrame.numRows
+    	local offset = scrollFrame:GetOffset()
+    
+    	for rowIndex = 1, numRows do
+    		local rowFrame = scrollFrame:GetRow(rowIndex)
+    		local line = rowIndex + offset
+    		
+    		if line <= #recipeList then	-- if the line is visible
+    			local color, recipeID, isLearned, recipeRank, totalRanks = DataStore:GetRecipeInfo(recipeList[line])
+    			
+    			rowFrame:Update(currentProfession, recipeID, RecipeColors[color], isLearned, recipeRank, totalRanks)
+    			rowFrame:Show()
+    		else
+    			rowFrame:Hide()
+    		end
+    	end
+        
+        for rowIndex = numRows, 18 do
+            scrollFrame:GetRow(rowIndex):Hide()
+        end
+    
+    	scrollFrame:Update(#recipeList)
 	end,
 	Link_OnClick = function(frame, button)
 		if button ~= "LeftButton" then return end

@@ -15,4 +15,4 @@ How to support Altoholic's development:
 - To make a one-off donation to the current maintainer (Teelo): Use the donate button on https://www.curseforge.com/wow/addons/altoholic-retail/
 - For an ongoing donation to the maintainer: Support Teelo on Patreon : https://www.patreon.com/TeeloJubeithos 
 
-If you like the addon, consider supporting it, this has been the long term effort and commitment of two people.
+If you like the addon, consider supporting it, this has been a long term effort and commitment.

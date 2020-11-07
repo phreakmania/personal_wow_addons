@@ -4,8 +4,8 @@ Author: Teelo
 
 This library contains a database of profession categories
 
-Database extracted from: https://wow.tools/dbc/?dbc=tradeskillcategory&build=8.3.7.35249&hotfixes=true#page=1
-Converted to Lua using: https://thdoan.github.io/mr-data-converter/
+Database extracted from: https://wow.tools/dbc/?dbc=tradeskillcategory
+Converted to Lua using: https://github.com/teelolws/Altoholic-Retail/blob/master/Utils/MakeWoWLibraries/src/mains/MakeLibCraftCategories.java
 
 --]]
 
@@ -29,12 +29,15 @@ end
 C_Timer.After(1, initialize)
 
 --	*** API ***
-
+local outputErrorOnce = false
 -- pass in localized category name, get the expansionID
 function lib.categoryNameToExpansionID(categoryName)
-    local expansionID = 8
+    if not categoryName then return end
+    
+    local expansionID = GetClientDisplayExpansionLevel() + 1
     local professionCategoryTable = lib[GAME_LOCALE]
-    for k, v in ipairs(professionCategoryTable) do
+
+    for k, v in pairs(professionCategoryTable) do
         if (((type(categoryName) == "string") and ((v.Name_lang == categoryName) or (v.HordeName_lang == categoryName))) 
                 or ((type(categoryName) == "number") and (v.ID == categoryName))) then
             if v.ParentTradeSkillCategoryID ~= 0 then
@@ -53,4 +56,8 @@ function lib.categoryNameToExpansionID(categoryName)
             end
         end 
     end
+
+    if outputErrorOnce then return end
+    print("Error in LibCraftCategories: failed to find category name:", categoryName)
+    outputErrorOnce = true
 end

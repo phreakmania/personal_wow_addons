@@ -242,16 +242,16 @@ function addon:SetupOptions()
 	DataStore:AddOptionCategory(AltoholicGeneralOptions, addonName)
 	LibStub("LibAboutPanel").new(addonName, addonName);
 	DataStore:AddOptionCategory(AltoholicHelp, HELP_LABEL, addonName)
-	DataStore:AddOptionCategory(AltoholicSupport, "Getting support", addonName)
-	DataStore:AddOptionCategory(AltoholicWhatsNew, "What's new?", addonName)
+	DataStore:AddOptionCategory(AltoholicSupport, L["Getting support"], addonName)
+	DataStore:AddOptionCategory(AltoholicWhatsNew, L["What's new?"], addonName)
 	DataStore:AddOptionCategory(AltoholicMemoryOptions, L["Memory used"], addonName)
 	DataStore:AddOptionCategory(AltoholicSearchOptions, SEARCH, addonName)
 	DataStore:AddOptionCategory(AltoholicMailOptions, MAIL_LABEL, addonName)
 	DataStore:AddOptionCategory(AltoholicMiscOptions, MISCELLANEOUS, addonName)
 	DataStore:AddOptionCategory(AltoholicAccountSharingOptions, L["Account Sharing"], addonName)
-	DataStore:AddOptionCategory(AltoholicSharedContent, "Shared Content", addonName)
+	DataStore:AddOptionCategory(AltoholicSharedContent, L["Shared Content"], addonName)
 	DataStore:AddOptionCategory(AltoholicTooltipOptions, L["Tooltip"], addonName)
-    DataStore:AddOptionCategory(AltoholicTooltipCounterOptions, "Tooltip Counters", addonName)
+    DataStore:AddOptionCategory(AltoholicTooltipCounterOptions, L["Tooltip Counters"], addonName)
 	DataStore:AddOptionCategory(AltoholicCalendarOptions, L["Calendar"], addonName)
 
 	DataStore:SetupInfoPanel(help, AltoholicHelp_Text)
@@ -381,7 +381,7 @@ function addon:SetupOptions()
 	
 	
 	-- ** Shared Content **
-	AltoholicSharedContentText1:SetText(colors.white.."Shared Content")
+	AltoholicSharedContentText1:SetText(colors.white..L["Shared Content"])
 	AltoholicSharedContent_SharedContentInfoButton.tooltip = format("%s\n%s", 
 		colors.white.."Select the content that will be visible to players who send you",
 		"account sharing requests.")

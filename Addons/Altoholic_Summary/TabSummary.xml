@@ -11,7 +11,7 @@
 				<FontString parentKey="Totals" inherits="GameFontNormal" justifyH="RIGHT">
 					<Size x="400" y="24" />
 					<Anchors>
-						<Anchor point="BOTTOMRIGHT" x="30" y="13" />
+						<Anchor point="BOTTOMRIGHT" relativeTo="AltoholicFrame" x="-20" y="13" />
 					</Anchors>
 				</FontString>
 			</Layer>
@@ -57,7 +57,11 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem7" relativePoint="BOTTOMLEFT" x="0" y="0" />
 				</Anchors>
 			</Button>
-            
+            <Button parentKey="MenuItem9" inherits="AltoTabSummaryMenuItemTemplate" id="9">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.MenuItem8" relativePoint="BOTTOMLEFT" x="0" y="0" />
+				</Anchors>
+			</Button>
 			
 			<Button parentKey="RealmsIcon" inherits="AltoTabSummaryIconTemplate" id="1">
 				<Anchors>
@@ -101,7 +105,7 @@
 			</Button>
 			<Button parentKey="DataStoreOptionsIcon" inherits="AltoTabSummaryIconTemplate" id="7">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeKey="$parent" relativePoint="TOPRIGHT" x="25" y="-40" />
+					<Anchor point="TOPRIGHT" relativeTo="AltoholicFrame" relativePoint="TOPRIGHT" x="-25" y="-40" />
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="iconFile" value="Interface\Icons\INV_Misc_Book_11" />
@@ -114,7 +118,7 @@
 				</Scripts>
 			</Button>
             
-            <Button name="$parent_DesMephistoButton" inherits="UIPanelButtonTemplate" text="Reset Filters"> <!-- Reset All Filters button -->
+            <Button name="$parent_DesMephistoButton" inherits="UIPanelButtonTemplate"> <!-- Reset All Filters button -->
             	<Size x="100" y="20" />
                 <Anchors>
                     <Anchor point="TOPLEFT" relativeKey="$parent.ClassIcon" relativePoint="TOPRIGHT" x="10" y="-8"/>
@@ -163,7 +167,7 @@
 			
 			<Frame parentKey="SortButtons" inherits="AltoSortButtonsContainerTemplate">
 				<KeyValues>
-					<KeyValue key="numButtons" value="9" type="number" />
+					<KeyValue key="numButtons" value="19" type="number" />
 					<KeyValue key="option" value="UI.Tabs.Summary.SortAscending" />
 				</KeyValues>
 			</Frame>
@@ -206,6 +210,7 @@
 				self.MenuItem6:SetText(GARRISON_FOLLOWERS_TITLE)
                 self.MenuItem7:SetText(PVEFrameTab3:GetText())
                 self.MenuItem8:SetText("Misc")
+                self.MenuItem9:SetText(L["Equipment"])
 					
 				self.RequestSharing:SetText(L["Account Sharing"])
 				

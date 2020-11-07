@@ -24,7 +24,8 @@ L["Interval"] = "Промежуток"
 L["LEFT"] = "Слева"
 L["NPCs"] = "Существа"
 L["Play alert sounds when sound is muted."] = "Воспроизведение звуковых оповещений, даже если громкость звука в игре снижена до нуля."
-L["Predefined NPCs cannot be added to or removed from the user-defined NPC list."] = "Невозможно добавить существ, которые изначально уже внесены в модификацию."
+--[[Translation missing --]]
+--[[ L["Predefined NPCs cannot be added to the user-defined NPC list."] = "Predefined NPCs cannot be added to the user-defined NPC list."--]] 
 L["Removed %1$s (%2$d) from the user-defined NPC list."] = "Из пользовательского списка существ удалено существо %1$s (%2$d)."
 L["Reset Position"] = "Сбросить положение"
 L["RIGHT"] = "Справа"

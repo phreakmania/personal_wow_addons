@@ -20,6 +20,7 @@ local AddonDB_Defaults = {
 			['*'] = {				-- ["Account.Realm.Name"]
 				lastUpdate = nil,
 				Rares = {},
+                RareKillsCounter = {},
 			}
 		},
 	}
@@ -35,7 +36,7 @@ local function ClearExpiredRares()
 		local rares = character.Rares
 		
 		for questID, data in pairs(rares) do
-			if now > data.resetTime then
+			if now > (character.lastUpdate + data.resetTime) then
 				rares[questID] = nil
 			end
 		end
@@ -45,8 +46,6 @@ end
 local function ScanRares()
 	local char = addon.ThisCharacter
 	local rares = char.Rares
-    
-    wipe(rares)
     
     for _, rareList in pairs(addon.RareList) do
         local listName = rareList[1]
@@ -69,11 +68,17 @@ local function ScanRares()
             end
             
             if questID and C_QuestLog.IsQuestFlaggedCompleted(questID) then
+                if not rares[creatureID] then
+                    local counter = char.RareKillsCounter
+                    if not counter[creatureID] then counter[creatureID] = 0 end
+                    counter[creatureID] = counter[creatureID] + 1
+                end
                 if resetPeriod == "DAILY" then
                     rares[creatureID] = {["resetTime"] = GetQuestResetTime(), ["name"] = creatureName}
                 elseif resetPeriod == "WEEKLY" then
                     rares[creatureID] = {["resetTime"] = C_DateAndTime.GetSecondsUntilWeeklyReset(), ["name"] = creatureName}
                 end
+                
             end
         end
     end
@@ -99,9 +104,14 @@ local function _GetRareList()
     return addon.RareList
 end
 
+local function _GetRareKills(character, creatureID)
+    return character.RareKillsCounter[creatureID]
+end
+
 local PublicMethods = {
 	GetKilledRares = _GetKilledRares,
     GetRareList = _GetRareList,
+    GetRareKills = _GetRareKills,
 }
 
 function addon:OnInitialize()
@@ -109,6 +119,7 @@ function addon:OnInitialize()
 
 	DataStore:RegisterModule(addonName, addon, PublicMethods)
 	DataStore:SetCharacterBasedMethod("GetKilledRares")
+    DataStore:SetCharacterBasedMethod("GetRareKills")
 end
 
 function addon:OnEnable()

@@ -166,7 +166,7 @@ function ns:TryFilter(filter)
 end
 
 -- currently searched item
-function ns:SetSearchedItem(itemID, itemLink, isBattlePet)
+function ns:SetSearchedItem(itemID, itemLink, isBattlePet, followUpFunc)
 	local s = searchedItem
 	local _
 
@@ -176,7 +176,21 @@ function ns:SetSearchedItem(itemID, itemLink, isBattlePet)
         s.itemLink = itemLink
 	else
 		s.itemID = itemID
-		s.itemName, s.itemLink, s.itemRarity, s.itemLevel,	s.itemMinLevel, s.itemType, s.itemSubType, _, s.itemEquipLoc = GetItemInfo(itemLink or itemID)
+        local item
+        if itemLink then
+            item = Item:CreateFromItemLink(itemLink)
+        elseif itemID then
+            item = Item:CreateFromItemID(itemID)
+        else
+            return
+        end
+        if item:IsItemEmpty() then return end
+        item:ContinueOnItemLoad(function()
+		    s.itemName, s.itemLink, s.itemRarity, s.itemLevel,	s.itemMinLevel, s.itemType, s.itemSubType, _, s.itemEquipLoc = GetItemInfo(itemLink or itemID)
+            if followUpFunc then
+                followUpFunc()
+            end
+        end)
 	end
 end
 

@@ -681,6 +681,17 @@ do
         debug( " - we will use the ability on a different target, if available, until %s expires at %.2f [+%.2f].", cycle.aura, cycle.expires, cycle.expires - state.query_time )
     end
 
+    function state.GetCycleInfo()
+        return cycle.expires, cycle.minTTD, cycle.maxTTD, cycle.aura
+    end
+
+    function state.SetCycleInfo( expires, minTTD, maxTTD, aura )
+        cycle.expires = expires
+        cycle.minTTD  = minTTD
+        cycle.maxTTD  = maxTTD
+        cycle.aura    = aura
+    end
+
     function state.IsCycling( aura )
         if not cycle.aura then return false end
         if aura and cycle.aura ~= aura then return false end
@@ -728,11 +739,11 @@ local function applyBuff( aura, duration, stacks, value )
         aura = auraInfo.alias[1]
     end
 
-    --[[ if state.cycle then
+    if state.cycle then
         if duration == 0 then state.active_dot[ aura ] = state.active_dot[ aura ] - 1
         else state.active_dot[ aura ] = state.active_dot[ aura ] + 1 end
         return
-    end ]]
+    end
 
     local b = state.buff[ aura ]
     if not b then return end
@@ -836,6 +847,23 @@ local function removeStack( aura, stacks )
     end
 end
 state.removeStack = removeStack
+
+
+local function removeDebuffStack( unit, aura, stacks )
+    stacks = stacks or 1
+
+    local d = state.debuff[ aura ]
+
+    if not d then return end
+
+    if d.count > stacks then
+        d.lastCount = d.count
+        d.count = max( 1, d.count - stacks )
+    else
+        removeDebuff( unit, aura )
+    end
+end
+state.removeDebuffStack = removeDebuffStack
 
 
 -- Add a debuff to the simulated game state.
@@ -1009,16 +1037,16 @@ function state.channelSpell( name, start, duration, id )
     end
 end
 
-function state.stopChanneling( reset )
+function state.stopChanneling( reset, action )
     if not reset then
         local spell = state.player.channelSpell
         local ability = spell and class.abilities[ spell ]
 
-        if spell then
+        if spell and spell ~= action then
             if Hekili.ActiveDebug then Hekili:Debug( "Breaking channel of %s (non-reset).", state.player.channelSpell or "nil", tostring( reset ) or "false" ) end
             state:RemoveSpellEvents( spell )
+            if ability and ability.breakchannel then ability.breakchannel() end
         end
-        if ability and ability.breakchannel then ability.breakchannel() end
     end
 
     state.player.channelSpell = nil
@@ -1587,7 +1615,7 @@ local mt_state = {
             return 'wait'
         
         elseif k == 'current_action' then
-            return 'this_action'
+            return t.this_action
 
         elseif k == 'cast_target' then
             return 'nobody'
@@ -1602,9 +1630,9 @@ local mt_state = {
             return nil
         
         elseif k == 'selection' then
-            return t.selectionTime < 60
+            return t.selection_time < 60
 
-        elseif k == 'selectionTime' then
+        elseif k == 'selection_time' then
             return 60
 
         elseif k == 'desired_targets' then
@@ -1868,7 +1896,7 @@ local mt_state = {
             return t.cooldown[ action ].charges_fractional
 
         elseif k == 'time_to_max_charges' or k == 'full_recharge_time' then
-            return t.cooldown[ action ].full_recharge_time
+                return ( ( ability.charges or 1 ) - t.charges_fractional ) * ( ability.recharge or ability.cooldown )
 
         elseif k == 'max_charges' or k == 'charges_max' then
             return ability and ability.charges or 1
@@ -1919,7 +1947,7 @@ local mt_state = {
 
             elseif k == 'time_to_refresh' then
                 -- if t.isCyclingTargets( action, aura_name ) then return 0 end
-                if app then return max( 0, app.remains - ( 0.3 * app.duration ) ) end
+                if app then return max( 0, 0.01 + app.remains - ( 0.3 * app.duration ) ) end
                 return 0
 
             elseif k == 'ticking' or k == "up" then
@@ -2207,7 +2235,7 @@ local mt_pets = {
             return UnitExists( 'pet' ) and ( not UnitIsDead( 'pet' ) )
 
         elseif k == 'alive' then
-            return UnitExists( 'pet' ) and not UnitIsDead( 'pet' ) and UnitHealth( "pet" ) > 0
+            return UnitExists( "pet" ) and not UnitIsDead( "pet" ) and UnitHealth( "pet" ) > 0
 
         elseif k == 'dead' then
             return UnitExists( 'pet' ) and UnitIsDead( 'pet' )
@@ -3178,7 +3206,7 @@ local mt_default_buff = {
             return t.remains < 0.3 * ( aura.duration or 30 )
 
         elseif k == 'time_to_refresh' then
-            return t.up and max( 0, t.remains - ( 0.3 * ( aura.duration or 30 ) ) ) or 0
+            return t.up and max( 0, 0.01 + t.remains - ( 0.3 * ( aura.duration or 30 ) ) ) or 0
 
         elseif k == 'cooldown_remains' then
             return state.cooldown[ t.key ] and state.cooldown[ t.key ].remains or 0
@@ -4135,7 +4163,7 @@ local mt_default_debuff = {
 
         elseif k == 'time_to_refresh' then
             -- if state.isCyclingTargets( nil, t.key ) then return 0 end
-            return t.up and ( max( 0, state.query_time - ( 0.3 * ( aura and aura.duration or t.duration or 30 ) ) ) ) or 0
+            return t.up and ( max( 0, 0.01 + state.query_time - ( 0.3 * ( aura and aura.duration or t.duration or 30 ) ) ) ) or 0
 
         elseif k == 'stack' then
             -- if state.isCyclingTargets( nil, t.key ) then return 0 end
@@ -4344,7 +4372,7 @@ local mt_default_action = {
             return ability.charges or 0
 
         elseif k == 'time_to_max_charges' or k == 'full_recharge_time' then
-            return ( ability.charges - state.cooldown[ t.action ].charges_fractional ) * ability.recharge
+            return ( ( ability.charges or 1 ) - state.cooldown[ t.action ].charges_fractional ) * ( ability.recharge or ability.cooldown )
 
         elseif k == 'ready_time' then
             return state:IsUsable( t.action ) and state:TimeToReady( t.action ) or 999
@@ -4408,11 +4436,11 @@ local mt_default_action = {
             return a
 
         elseif k == 'cost_type' then
-            local a = ability.spendType
+            local a, _ = ability.spendType
             if type( a ) == "string" then return a end
 
-            local a = ability.spend
-            if type( a ) == "function" then a, a = a() end
+            a = ability.spend
+            if type( a ) == "function" then _, a = a() end
             if type( a ) == "string" then return a end
             return class.primaryResource
 
@@ -4823,8 +4851,8 @@ do
 
             if ability then
                 if type == "PROJECTILE_IMPACT" then
-                    if ability.flightTime then time = start + ability.flightTime
-                    else time = start + ( state.target.distance / ability.velocity ) end
+                    if ability.flightTime then time = start + 0.05 + ability.flightTime
+                    else time = start + 0.05 + ( state.target.distance / ability.velocity ) end
                 
                 elseif type == "CHANNEL_START" then
                     time = start
@@ -4937,6 +4965,9 @@ do
         return success
     end
 
+
+    local EVENT_EXPIRE_MARGIN = 0.2
+
     function state:ResetQueues()
         for i = #virtualQueue, 1, -1 do
             RecycleEvent( virtualQueue, i )
@@ -4947,7 +4978,7 @@ do
         for i = #realQueue, 1, -1 do
             local e = realQueue[ i ]
 
-            if e.time < now then
+            if e.time + EVENT_EXPIRE_MARGIN < now then
                 RecycleEvent( realQueue, i )
             end
         end
@@ -5017,19 +5048,28 @@ do
             -- Spend resources.
             ns.spendResources( action )
 
-            local wasCycling
+            local wasCycling = self.IsCycling()
+            local expires, minTTD, maxTTD, aura
+            
+            if wasCycling then
+                expires, minTTD, maxTTD, aura = self.GetCycleInfo()
+            end
 
-            if not self.cycle and e.target and self.target.unit ~= "unknown" and e.target ~= self.target.unit then
-                wasCycling = rawget( self, cycle )
-                self.cycle = true
+            if Hekili.ActiveDebug then Hekili:Debug( "%s %s %s %s", tostring( self.cycle ), tostring( e.target ) or "notarget", tostring( self.target.unit ) or "notarget", tostring( e.target == self.target.unit ) ) end
+
+            if e.target and self.target.unit ~= "unknown" and e.target ~= self.target.unit then
+                if Hekili.ActiveDebug then Hekili:Debug( "Using ability on a different target." ) end
+                self.SetupCycle( ability )
             end
 
             -- Perform the action.            
             self:RunHandler( action )
             self.hardcast = nil
 
-            if self.cycle then
-                self.cycle = wasCycling
+            if wasCycling then
+                self.SetCycleInfo( expires, minTTD, maxTTD, aura )
+            else
+                self.ClearCycle()
             end
 
             if ability.item and not ability.essence then
@@ -5041,7 +5081,7 @@ do
 
         elseif e.type == "CHANNEL_FINISH" then
             if ability.finish then ability.finish() end
-            self.stopChanneling()
+            self.stopChanneling( false, ability.key )
 
         elseif e.type == "PROJECTILE_IMPACT" then
             if ability.impact then ability.impact() end
@@ -5208,8 +5248,8 @@ function state.reset( dispName )
     state.ClearCycle()
     state:ResetVariables()
 
-    state.selectionTime = 60
-    state.selectedAction = nil
+    state.selection_time = 60
+    state.selected_action = nil
 
     local _, zone = GetInstanceInfo()
 
@@ -5440,7 +5480,7 @@ function state.reset( dispName )
 
                 res.active_regen = active or 0
                 res.inactive_regen = inactive or 0
-
+                res.regen = nil
             else
                 if ResourceRegenerates( k ) then
                     local inactive, active = GetPowerRegenForPowerType( power.type )
@@ -5517,10 +5557,24 @@ function state.reset( dispName )
     -- 2.  We cannot cast anything while casting (typical), so we want to advance the clock, complete the cast, and then generate recommendations.
 
     if casting and cast_time > 0 then
-        if not state:IsCasting( casting ) then
-            local channeled = ability and ability.channeled
+        local channeled, destGUID
+            
+        if ability then
+            channeled = ability.channeled
+            destGUID =  Hekili:GetMacroCastTarget( ability.key, state.buff.casting.applied, "RESET" ) or state.target.unit
+        end
 
-            state:QueueEvent( casting, state.buff.casting.applied, state.buff.casting.expires, channeled and "CHANNEL_FINISH" or "CAST_FINISH", state.target.unit )
+        if not state:IsCasting( casting ) and not channeled then
+            state:QueueEvent( casting, state.buff.casting.applied, state.buff.casting.expires, "CAST_FINISH", destGUID )
+            
+            -- Projectile spells have two handlers, effectively.  An onCast handler, and then an onImpact handler.
+            if ability and ability.isProjectile then
+                state:QueueEvent( ability.key, state.buff.casting.expires, nil, "PROJECTILE_IMPACT", destGUID )
+                -- state:QueueEvent( action, "projectile", true )
+            end
+
+        elseif not state:IsChanneling( casting ) and channeled then
+            state:QueueEvent( casting, state.buff.casting.applied, state.buff.casting.expires, "CHANNEL_FINISH", destGUID )
             
             if channeled then
                 local tick_time = ability.tick_time or ( ability.aura and class.auras[ ability.aura ].tick_time )
@@ -5529,14 +5583,21 @@ function state.reset( dispName )
                     local eoc = state.buff.casting.expires - tick_time
 
                     while ( eoc > state.now ) do
-                        state:QueueEvent( casting, state.buff.casting.applied, eoc, "CHANNEL_TICK", state.target.unit )
+                        state:QueueEvent( casting, state.buff.casting.applied, eoc, "CHANNEL_TICK", destGUID )
                         eoc = eoc - tick_time
                     end
                 end
             end
+
+            -- Projectile spells have two handlers, effectively.  An onCast handler, and then an onImpact handler.
+            if ability and ability.isProjectile then
+                state:QueueEvent( ability.key, state.buff.casting.expires, nil, "PROJECTILE_IMPACT", destGUID )
+                -- state:QueueEvent( action, "projectile", true )
+            end
         end
 
-        if not state.spec.canCastWhileCasting then
+
+        --[[ if not state.spec.canCastWhileCasting then
             if ( not ability or not ability.breakable ) then
                 -- Revisit auto-advance, we may be overcompensating for it now that we use the queue.
                 state.setCooldown( "global_cooldown", max( cast_time, state.cooldown.global_cooldown.remains ) )
@@ -5551,7 +5612,7 @@ function state.reset( dispName )
                     end
                 end
             end
-        end
+        end ]]
     end    
 
     -- Delay to end of GCD.
@@ -5631,7 +5692,7 @@ function state.advance( time )
     local eCount = 0
 
     while( event ) do
-        if event.time > state.query_time and event.time <= state.query_time + time then
+        if event.time <= state.query_time + time then
             state.offset = event.time - state.now
 
             if Hekili.ActiveDebug then Hekili:Debug( "While advancing by %.2f to %.2f, %s %s occurred at %.2f.", time, realOffset + time, event.action, event.type, state.offset ) end
@@ -5974,25 +6035,25 @@ do
 
         spell = ability.key
 
-        if self.holds[ spell ] then return true end
+        if self.holds[ spell ] then return true, "on hold" end
 
         local profile = Hekili.DB.profile
         local spec = profile.specs[ state.spec.id ]
 
         local option = ability.item and spec.items[ spell ] or spec.abilities[ spell ]
 
-        if option.disabled then return true end
-        if option.boss and not state.boss then return true end
+        if option.disabled then return true, "preference" end
+        if option.boss and not state.boss then return true, "boss-only" end
 
         if not strict then
             local toggle = option.toggle
             if not toggle or toggle == 'default' then toggle = ability.toggle end
 
             if ability.id < -100 or ability.id > 0 or toggleSpells[ spell ] then
-                if state.filter ~= 'none' and state.filter ~= toggle and not ability[ state.filter ] then return true
+                if state.filter ~= 'none' and state.filter ~= toggle and not ability[ state.filter ] then return true, "display"
                 elseif ability.item and not state.equipped[ ability.item ] then return false
                 elseif toggle and toggle ~= 'none' then
-                    if not self.toggle[ toggle ] or ( profile.toggles[ toggle ].separate and state.filter ~= toggle ) then return true end
+                    if not self.toggle[ toggle ] or ( profile.toggles[ toggle ].separate and state.filter ~= toggle ) then return true, "toggle" end
                 end
             end
         end

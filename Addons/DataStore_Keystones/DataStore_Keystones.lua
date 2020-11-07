@@ -76,23 +76,40 @@ local function ScanCurrentKeystoneInfo()
     char.lastUpdate = time()
 end
 
--- *** Event Handlers ***
-local function OnNewWeeklyRecord(event, ...)
-    local mapChallengeModeID, completionMilliseconds, level = ...
+local function ScanHighestKeystone()
     local char = addon.ThisCharacter
-    local name, id, timeLimit, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(mapChallengeModeID)
+    wipe(char.highestKeystoneThisWeek)
+    local maps = C_ChallengeMode.GetMapTable()
+    if not maps then return end
     
-    char.highestKeystoneThisWeek.name = name
-    char.highestKeystoneThisWeek.completionMilliseconds = completionMilliseconds
-    char.highestKeystoneThisWeek.level = level
-    char.highestKeystoneThisWeek.texture = texture
-    char.highestKeystoneThisWeek.backgroundTexture = backgroundTexture
-    
-    char.lastUpdate = time()
+    local bestTime, bestLevel
+    for i = 1, #maps do
+		local durationSec, weeklyLevel = C_MythicPlus.GetWeeklyBestForMap(maps[i])
+        if weeklyLevel then
+            if (not bestTime) or (weeklyLevel > bestLevel) or ((weeklyLevel == bestLevel) and (durationSec < bestTime)) then
+                local name, id, timeLimit, texture, backgroundTexture = C_ChallengeMode.GetMapUIInfo(maps[i])
+                char.highestKeystoneThisWeek.name = name
+                char.highestKeystoneThisWeek.completionMilliseconds = durationSec * 1000
+                char.highestKeystoneThisWeek.level = weeklyLevel
+                char.highestKeystoneThisWeek.texture = texture
+                char.highestKeystoneThisWeek.backgroundTexture = backgroundTexture
+                
+                char.lastUpdate = time()
+                
+                bestTime = durationSec * 1000
+                bestLevel = weeklyLevel
+            end
+        end
+    end
 end
 
+-- *** Event Handlers ***
 local function OnPlayerAlive()
 	ScanCurrentKeystoneInfo()
+end
+
+local function OnAffixUpdate()
+    ScanHighestKeystone()
 end
 
 local function OnItemReceived(event, bag)
@@ -232,14 +249,13 @@ end
 
 function addon:OnEnable()
 	addon:RegisterEvent("PLAYER_ALIVE", OnPlayerAlive)
-	addon:RegisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD", OnNewWeeklyRecord)
 	addon:RegisterEvent("BAG_UPDATE", OnItemReceived)
-    
+    addon:RegisterEvent("CHALLENGE_MODE_MAPS_UPDATE", OnAffixUpdate)
     ClearExpiredKeystones()
 end
 
 function addon:OnDisable()
 	addon:UnregisterEvent("PLAYER_ALIVE")
-	addon:UnregisterEvent("MYTHIC_PLUS_NEW_WEEKLY_RECORD")
+	addon:UnregisterEvent("CHALLENGE_MODE_MAPS_UPDATE")
 	addon:UnregisterEvent("BAG_UPDATE")
 end

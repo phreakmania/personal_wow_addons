@@ -1125,6 +1125,7 @@ do
                                 order = 10,
 
                                 args = {
+                                    --[[
                                     relativeTo = {
                                         type = "select",
                                         name = "Anchored To",
@@ -1147,7 +1148,6 @@ do
                                         hidden = function() return data.relativeTo ~= "CUSTOM" end,
                                     },
 
-
                                     setParent = {
                                         type = "toggle",
                                         name = "Set Parent to Anchor",
@@ -1157,13 +1157,12 @@ do
                                         hidden = function() return data.relativeTo == "SCREEN" end,
                                     },
 
-
                                     preXY = {
                                         type = "description",
                                         name = " ",
                                         width = "full",
                                         order = 97
-                                    },
+                                    }, ]]
 
                                     x = {
                                         type = "range",
@@ -3377,6 +3376,18 @@ do
             end
         end
 
+        local use_items_found = false
+
+        for _, list in pairs( output ) do
+            for i, entry in ipairs( list ) do
+                if entry.action == "use_items" then use_items_found = true end
+            end
+        end
+
+        if not use_items_found then
+            AddWarning( "The 'use_items' action was not found in this import." )
+        end
+
         if not output.default then output.default = {} end
         if not output.precombat then output.precombat = {} end  
 
@@ -3636,7 +3647,7 @@ do
 
         for k, v in orderedPairs( abilities ) do
             local ability = class.abilities[ v ]
-            local useName = ability.name
+            local useName = class.abilityList[ v ] and class.abilityList[v]:match("|t (.+)$") or ability.name
 
             if not useName then
                 Hekili:Error( "No name available for %s (id:%d) in EmbedAbilityOptions.", ability.key or "no_id", ability.id or 0 )
@@ -5710,7 +5721,7 @@ do
                                                     if not class.abilities[ action ] then warning = true
                                                     else
                                                         if state:IsDisabled( action, true ) then warning = true end
-                                                        action = class.abilities[ action ].name
+                                                        action = class.abilityList[ action ] and class.abilityList[ action ]:match( "|t (.+)$" ) or class.abilities[ action ] and class.abilities[ action ].name or action
                                                     end
                                                 end
 
@@ -7727,6 +7738,14 @@ function Hekili:GenerateProfile()
         end
     end
 
+    local pvptalents
+    for k,v in orderedPairs( s.pvptalent ) do
+        if v.enabled then
+            if pvptalents then pvptalents = format( "%s\n   %s", pvptalents, k )
+            else pvptalents = k end
+        end
+    end
+
     local covenants = { "kyrian", "necrolord", "night_fae", "venthyr" }
     local covenant = "none"
     for i, v in ipairs( covenants ) do
@@ -7811,6 +7830,7 @@ function Hekili:GenerateProfile()
         "class: %s\n" ..
         "spec: %s\n\n" ..
         "talents: %s\n\n" ..
+        "pvptalents: %s\n\n" ..
         "covenant: %s\n\n" ..
         "azerite: %s\n\n" ..
         "essences: %s\n\n" ..
@@ -7825,6 +7845,7 @@ function Hekili:GenerateProfile()
         class.file or "NONE",
         spec or "none",
         talents or "none",
+        pvptalents or "none",
         covenant or "none",
         traits or "none",
         essences or "none",
@@ -9368,7 +9389,11 @@ do
 
                     if ability and ( ability == 'use_item' or class.abilities[ ability ] ) then
                         if ability == "pocketsized_computation_device" then ability = "cyclotronic_blast" end
-                        result.action = class.abilities[ ability ] and class.abilities[ ability ].key or ability
+                        if ability == "any_dnd" or ability == "wound_spender" then
+                            result.action = ability
+                        else
+                            result.action = class.abilities[ ability ] and class.abilities[ ability ].key or ability
+                        end
                     elseif not ignore_actions[ ability ] then
                         table.insert( warnings, "Line " .. line .. ": Unsupported action '" .. ability .. "'." )
                         result.action = ability
@@ -9386,7 +9411,6 @@ do
                         end
 
                         result[ key ] = value
-                        -- StoreModifier( result, key, value )
                     end
                 end
             end
@@ -9395,14 +9419,6 @@ do
                 result[ nameMap[ result.action ] ] = result.name
                 result.name = nil
             end
-
-            --[[ if result.target_if then
-                if result.criteria and result.criteria:len() > 0 then   
-                    result.criteria = format( "( %s ) & ( %s )", result.criteria, result.target_if )
-                else
-                    result.criteria = result.target_if
-                end
-            end ]]
 
             if result.target_if then result.target_if = result.target_if:gsub( "min:", "" ):gsub( "max:", "" ) end
 
@@ -9430,11 +9446,6 @@ do
             if result.action == 'variable' and not result.op then
                 result.op = 'set'
             end
-
-            --[[ if result.criteria then
-                result.criteria = Sanitize( 'c', result.criteria, line, warnings )
-                result.criteria = SpaceOut( result.criteria )
-            end ]]
 
             table.insert( output, result )
         end

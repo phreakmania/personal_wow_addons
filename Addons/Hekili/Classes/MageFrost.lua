@@ -571,7 +571,13 @@ if UnitClassBase( 'player' ) == 'MAGE' then
         if now - action.ice_lance.lastCast < gcd.execute then removeBuff( "icicles" ) end
         if abs( now - brain_freeze_removed ) < 1 then applyDebuff( "target", "winters_chill" ) end
 
+        if prev_gcd[1].flurry and now - action.flurry.lastCast < gcd.execute and debuff.winters_chill.up then debuff.winters_chill.count = 2 end
+
         incanters_flow.reset()
+
+        if Hekili.ActiveDebug then
+            Hekili:Debug( "Ice Lance in-flight?  %s\nWinter's Chill Actual Stacks?  %d\nremaining_winters_chill:  %d", state:IsInFlight( "ice_lance" ) and "Yes" or "No", state.debuff.winters_chill.stack, state.remaining_winters_chill )
+        end
     end )
 
     
@@ -808,10 +814,12 @@ if UnitClassBase( 'player' ) == 'MAGE' then
 
             impact = function ()
                 if frost_info.virtual_brain_freeze then
-                    applyDebuff( "target", "winters_chill" )
+                    applyDebuff( "target", "winters_chill", nil, 2 )
                     frost_info.virtual_brain_freeze = false
                 end
-            end
+            end,
+
+            copy = 228354 -- ID of the Flurry impact.
         },
 
 
@@ -912,12 +920,19 @@ if UnitClassBase( 'player' ) == 'MAGE' then
             startsCombat = true,
             texture = 629077,
 
+            velocity = 20,
+
             handler = function ()
-                addStack( "fingers_of_frost", nil, 1 )
                 if talent.freezing_rain.enabled then applyBuff( "freezing_rain" ) end
                 applyBuff( "frozen_orb" )
+            end,                
+
+
+            --[[ Not modeling because you can throw it off in a random direction and get no procs.  Just react.
+            impact = function ()
+                addStack( "fingers_of_frost", nil, 1 )
                 applyDebuff( "target", "frozen_orb_snare" )
-            end,
+            end, ]]
 
             copy = 198149
         },
@@ -1039,10 +1054,12 @@ if UnitClassBase( 'player' ) == 'MAGE' then
 
             impact = function ()
                 if debuff.winters_chill.up then
-                    if debuff.winters_chill.stack > 1 then removeStack( "winters_chill" )
+                    if debuff.winters_chill.stack > 1 then removeDebuffStack( "target", "winters_chill", 1 )
                     else removeDebuff( "target", "winters_chill" ) end
                 end
-            end
+            end,
+
+            copy = 228598
         },
 
 
@@ -1153,8 +1170,6 @@ if UnitClassBase( 'player' ) == 'MAGE' then
             channeled = true,
             cooldown = 75,
             gcd = "spell",
-
-            channeled = true,
 
             spend = 0.02,
             spendType = "mana",

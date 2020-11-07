@@ -9,216 +9,9 @@ local THIS_REALM = GetRealmName()
 
 local storedLink = nil
 
-local GatheringNodes = {
-
-	-- Mining nodes
-	-- Classic
-	[L["Copper Vein"]]                     =  2770, -- Copper Ore
-	[L["Dark Iron Deposit"]]               = 11370, -- Dark Iron Ore
-	[L["Gold Vein"]]                       =  2776, -- Gold Ore
-	[L["Hakkari Thorium Vein"]]            = 10620, -- Thorium Ore
-	[L["Iron Deposit"]]                    =  2772, -- Iron Ore
-	[L["Mithril Deposit"]]                 =  3858, -- Mithril Ore
-	[L["Ooze Covered Gold Vein"]]          =  2776, -- Gold Ore
-	[L["Ooze Covered Mithril Deposit"]]    =  3858, -- Mithril Ore
-	[L["Ooze Covered Rich Thorium Vein"]]  = 10620, -- Thorium Ore
-	[L["Ooze Covered Silver Vein"]]        =  2775, -- Silver Ore
-	[L["Ooze Covered Thorium Vein"]]       = 10620, -- Thorium Ore
-	[L["Ooze Covered Truesilver Deposit"]] =  7911, -- Truesilver Ore
-	[L["Rich Thorium Vein"]]               = 10620, -- Thorium Ore
-	[L["Silver Vein"]]                     =  2775, -- Silver Ore
-	[L["Small Thorium Vein"]]              = 10620, -- Thorium Ore
-	[L["Tin Vein"]]                        =  2771, -- Tin Ore
-	[L["Truesilver Deposit"]]              =  7911, -- Truesilver Ore
-
-	[L["Lesser Bloodstone Deposit"]]       =  4278, -- Lesser Bloodstone Ore
-	[L["Incendicite Mineral Vein"]]        =  3340, -- Incendicite Ore
-	[L["Indurium Mineral Vein"]]           =  5833, -- Indurium Ore
-	[L["Large Obsidian Chunk"]]            = 22203, -- Large Obsidian Shard. Both drop on both nodes.
-	[L["Small Obsidian Chunk"]]            = 22202, -- Small Obsidian Shard. Both drop on both nodes.
-	
-	-- TBC
-	[L["Adamantite Deposit"]]              = 23425, -- Adamantite Ore
-	[L["Fel Iron Deposit"]]                = 23424, -- Fel Iron Ore
-	[L["Khorium Vein"]]                    = 23426, -- Khorium Ore
-	[L["Nethercite Deposit"]]              = 32464, -- Nethercite Ore
-	[L["Rich Adamantite Deposit"]]         = 23425, -- Adamantite Ore
-	
-	-- WotLK
-	[L["Cobalt Deposit"]]                     = 36909, -- Cobalt Ore
-	[L["Rich Cobalt Deposit"]]                = 36909, -- Cobalt Ore
-	[L["Saronite Deposit"]]                   = 36912, -- Saronite Ore
-	[L["Rich Saronite Deposit"]]              = 36912, -- Saronite Ore
-	[L["Titanium Vein"]]                      = 36910, -- Titanium Ore
-
-	-- Cataclysm
-	[L["Obsidium Deposit"]]                   = 53038, -- Obsidium Ore
-	[L["Rich Obsidium Deposit"]]              = 53038, -- Obsidium Ore
-	[L["Elementium Vein"]]                    = 52185, -- Elementium Ore
-	[L["Rich Elementium Vein"]]               = 52185, -- Elementium Ore
-	[L["Pyrite Deposit"]]                     = 52183, -- Pyrite Ore
-	[L["Rich Pyrite Deposit"]]                = 52183, -- Pyrite Ore
-
-	-- MoP
-	[L["Ghost Iron Deposit"]]                 = 72092, -- Ghost Iron Ore
-	[L["Rich Ghost Iron Deposit"]]            = 72092, -- Ghost Iron Ore
-	[L["Kyparite Deposit"]]                   = 72093, -- Kyparite Ore
-	[L["Rich Kyparite Deposit"]]              = 72093, -- Kyparite Ore
-	[L["Trillium Vein"]]                      = 72095, -- Trillium Bar, because this node produces two ores
-	[L["Rich Trillium Vein"]]                 = 72095, -- Trillium Bar, because this node produces two ores
-
-	-- WoD
-	[L["Blackrock Deposit"]]                  = 109118, -- Blackrock Ore
-	[L["Rich Blackrock Deposit"]]             = 109118, -- Blackrock Ore
-	[L["True Iron Deposit"]]                  = 109119, -- True Iron Ore 
-	[L["Rich True Iron Deposit"]]             = 109119, -- True Iron Ore
-	[L["Smoldering True Iron Deposit"]]       = 109119, -- True Iron Ore
-
-	-- Legion
-	[L["Leystone Deposit"]]                   = 123918, -- Leystone Ore
-	[L["Leystone Seam"]]                      = 123918, -- Leystone Ore
-	[L["Rich Leystone Deposit"]]              = 123918, -- Leystone Ore
-	[L["Felslate Deposit"]]                   = 123919, -- Felslate
-	[L["Felslate Seam"]]                      = 123919, -- Felslate
-	[L["Rich Felslate Deposit"]]              = 123919, -- Felslate
-	
-	[L["Empyrium Deposit"]]                   = 151564, -- Empyrium
-	[L["Empyrium Seam"]]                      = 151564, -- Empyrium
-	[L["Rich Empyrium Deposit"]]              = 151564, -- Empyrium	
-	
-	-- Battle for Azeroth
-	[L["Monelite Deposit"]]				   		= 152512, -- Monelite Ore
-	[L["Rich Monelite Deposit"]]			   	= 152512, -- Monelite Ore
-	[L["Monelite Seam"]]					   		= 152512, -- Monelite Ore
-	[L["Storm Silver Deposit"]]			   	= 152579, -- Storm Silver Ore
-	[L["Rich Storm Silver Deposit"]]		   	= 152579, -- Storm Silver Ore
-	[L["Storm Silver Seam"]]				   	= 152579, -- Storm Silver Ore
-	[L["Platinum Deposit"]]				   		= 152513, -- Platinum Ore
-	[L["Rich Platinum Deposit"]]			   	= 152513, -- Platinum Ore
-    [L["Osmenite Ore"]] = 168185,
-    [L["Osmenite Seam"]] = 168185,
-    [L["Rich Osmenite Deposit"]] = 168185,
-
-	
-	-- Herbs
-	-- Classic
-	[L["Arthas' Tears"]]        =  8836,
-	[L["Black Lotus"]]          = 13468,
-	[L["Blindweed"]]            =  8839,
-	[L["Bloodthistle"]]         = 22710,
-	[L["Briarthorn"]]           =  2450,
-	[L["Bruiseweed"]]           =  2453,
-	[L["Dreamfoil"]]            = 13463,
-	[L["Earthroot"]]            =  2449,
-	[L["Fadeleaf"]]             =  3818,
-	[L["Firebloom"]]            =  4625,
-	[L["Ghost Mushroom"]]       =  8845,
-	[L["Golden Sansam"]]        = 13464,
-	[L["Goldthorn"]]            =  3821,
-	[L["Grave Moss"]]           =  3369,
-	[L["Gromsblood"]]           =  8846,
-	[L["Icecap"]]               = 13467,
-	[L["Khadgar's Whisker"]]    =  3358,
-	[L["Kingsblood"]]           =  3356,
-	[L["Liferoot"]]             =  3357,
-	[L["Mageroyal"]]            =   785,
-	[L["Mountain Silversage"]]  = 13465,
-	[L["Peacebloom"]]           =  2447,
-	[L["Plaguebloom"]]          = 13466,
-	[L["Purple Lotus"]]         =  8831,
-	[L["Silverleaf"]]           =   765,
-	[L["Stranglekelp"]]         =  3820,
-	[L["Sungrass"]]             =  8838,
-	[L["Wild Steelbloom"]]      =  3355,
-	[L["Wintersbite"]]          =  3819,
-
-	-- TBC
-	[L["Ancient Lichen"]]       = 22790,
-	[L["Dreaming Glory"]]       = 22786,
-	[L["Felweed"]]              = 22785,
-	[L["Flame Cap"]]            = 22788,
-	[L["Glowcap"]]              = 24245,
-	[L["Mana Thistle"]]         = 22793,
-	[L["Netherbloom"]]          = 22791,
-	[L["Netherdust Bush"]]      = 32468, -- Netherdust Pollen
-	[L["Nightmare Vine"]]       = 22792,
-	[L["Ragveil"]]              = 22787,
-	[L["Sanguine Hibiscus"]]    = 24246,
-	[L["Terocone"]]             = 22789,
-}
-
-local herbsToAdd = {
-	-- WotLK
-	["Goldclover"]              = 36901,
-	["Adder's Tongue"]          = 36903,
-	["Tiger Lily"]              = 36904,
-	["Lichbloom"]               = 36905,
-	["Icethorn"]                = 36906,
-	["Talandra's Rose"]         = 36907,
-	["Frost Lotus"]             = 36908,
-	["Firethorn"]               = 39970,
-
-	-- Cataclysm
-	["Cinderbloom"]             = 52983,
-	["Stormvine"]               = 52984,
-	["Azshara's Veil"]          = 52985,
-	["Heartblossom"]            = 52986,
-	["Twilight Jasmine"]        = 52987,
-	["Whiptail"]                = 52988,
-
-	-- MoP
-	["Green Tea Leaf"]          = 72234,
-	["Silkweed"]                = 72235,
-	["Rain Poppy"]              = 72237,
-	["Snow Lily"]               = 79010,
-	["Fool's Cap"]              = 79011,
-
-	-- WoD
-	["Frostweed"]               = 109124,
-	["Fireweed"]                = 109125,
-	["Gorgrond Flytrap"]        = 109126,
-	["Starflower"]              = 109127,
-	["Nagrand Arrowbloom"]      = 109128,
-	["Talador Orchid"]          = 109129,
-
-	-- Legion
-	["Aethril"]                 = 124101,
-	["Dreamleaf"]               = 124102,
-	["Foxflower"]               = 124103,
-	["Fjarnskaggl"]             = 124104,
-	["Starlight Rose"]          = 124105,
-    ["Astral Glory"]     				      = 151565,	
-	
-	-- Battle for Azeroth
-	["Akunda's Bite"]           = 152507,
-	["Anchor Weed"]             = 152510,
-	["Riverbud"]                = 152505,
-	["Sea Stalk"]               = 152511,
-	["Siren's Pollen"]          = 152509,	
-	["Star Moss"]               = 152506,	
-	["Winter's Kiss"]           = 152508,
-    ["Zin'anthid"]              = 168487,	
-}
-
-for englishName, itemID in pairs(herbsToAdd) do
-    local item = Item:CreateFromItemID(itemID)
-        item:ContinueOnItemLoad(function()
-        GatheringNodes[item:GetItemName()] = itemID
-    end)
-end
-herbsToAdd = nil
+local LGN = LibStub("LibGatheringNodes-1.0")
 
 -- *** Utility functions ***
-local function IsGatheringNode(name)
-	if name then
-		for k, v in pairs(GatheringNodes) do
-			if name == k then				-- returns the itemID if "name" is a known type of gathering node (mines & herbs)
-				return v
-			end
-		end
-	end
-end
-
 local function GetCraftNameFromRecipeLink(link)
 	-- get the craft name from the itemlink (strsplit on | to get the 4th value, then split again on ":" )
 	local recipeName = select(4, strsplit("|", link))
@@ -335,6 +128,30 @@ local function GetRealmsList()
 	return realms
 end
 
+local function GetGuildRealmsList()
+    if not addon:GetOption("UI.Tooltip.ShowMergedRealmsCount") then
+        return GetRealmsList()
+    end
+    
+    -- same as GetRealmsList except also include known guilds on connected servers
+    local realms = GetRealmsList()
+    for characterName, character in pairs(DataStore:GetCharacters(THIS_REALM, THIS_ACCOUNT)) do
+        local _, _, _, guildRealm = DataStore:GetGuildInfo(character)
+        if guildRealm then
+            local exists = false
+            for _, realm in pairs(realms) do
+                if guildRealm == realm then
+                    exists = true
+                end
+            end
+            if not exists then
+                table.insert(realms, guildRealm)
+            end
+        end
+    end
+    return realms
+end
+
 local function GetCharacterItemCount(character, searchedID)
 	itemCounts[1], itemCounts[2], itemCounts[3], itemCounts[4] = DataStore:GetContainerItemCount(character, searchedID)
 	itemCounts[5] = DataStore:GetAuctionHouseItemCount(character, searchedID)
@@ -418,9 +235,9 @@ local function GetItemCount(searchedID)
 	end
 	
 	local showCrossFaction = addon:GetOption("UI.Tooltip.ShowCrossFactionCount")
-	
+    
 	if addon:GetOption("UI.Tooltip.ShowGuildBankCount") then
-		for _, realm in pairs(GetRealmsList()) do
+		for _, realm in pairs(GetGuildRealmsList()) do
 			for guildName, guildKey in pairs(DataStore:GetGuilds(realm)) do
 				local altoGuild = addon:GetGuild(guildName)
 				local bankFaction = DataStore:GetGuildBankFaction(guildKey)
@@ -542,7 +359,7 @@ function addon:GetRecipeOwners(professionName, link, recipeLevel, recipeRank)
                                         end
                                     end 
                                 else
-                                    if string.find(categoryName, expansionRequirement) then
+                                    if categoryName and string.find(categoryName, expansionRequirement) then
                                         shouldAdd = true
                                     else
                                         -- cooking has weird category names, also some "pandaren" instead of "pandaria" and "broken isles" instead of "legion"
@@ -679,7 +496,7 @@ local function ShowGatheringNodeCounters()
 	-- exit if player does not want counters for known gathering nodes
 	if addon:GetOption("UI.Tooltip.ShowGatheringNodesCount") == false then return end
 
-	local itemID = IsGatheringNode( _G["GameTooltipTextLeft1"]:GetText() )
+	local itemID = LGN.getItemID( _G["GameTooltipTextLeft1"]:GetText() )
 	if not itemID or (itemID == cachedItemID) then return end					-- is the item in the tooltip a known type of gathering node ?
 	
 	if Informant then
@@ -726,13 +543,13 @@ local function ProcessTooltip(tooltip, link)
 		(cachedItemID and (itemID ~= cachedItemID)) then
 
 		cachedRecipeOwners = nil
-		
+		cachedItemID = itemID			-- we have searched this ID ..
+        
 		-- these are the cpu intensive parts of the update .. so do them only if necessary
 		cachedSource = nil
 		if addon:GetOption("UI.Tooltip.ShowItemSource") then
 			local domain, subDomain = addon.Loots:GetSource(itemID)
-			
-			cachedItemID = itemID			-- we have searched this ID ..
+
 			if domain then
 				subDomain = (subDomain) and format(", %s", subDomain) or ""
 				cachedSource = format("%s: %s%s", colors.gold..L["Source"], colors.teal..domain, subDomain)
@@ -773,8 +590,6 @@ local function ProcessTooltip(tooltip, link)
 	
 	local _, _, _, _, _, itemType, itemSubType = GetItemInfo(itemID)
 	
-	-- 25/01/2015: Removed the code that displayed the pet owners, since they have been account wide for a while now..
-	
 	if itemType == GetItemClassInfo(LE_ITEM_CLASS_GLYPH) then
 		AddGlyphOwners(itemID, tooltip)
 		return
@@ -811,6 +626,7 @@ end
 
 -- ** GameTooltip hooks **
 local function OnGameTooltipShow(tooltip, ...)
+    if GameTooltip:GetItem() then return end
 	if ShowGatheringNodeCounters() then
 	   GameTooltip:Show()
     end

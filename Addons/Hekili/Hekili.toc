@@ -1,5 +1,5 @@
 ## Interface: 90001
-## Version: v9.0.1-1.0.16
+## Version: v9.0.1-1.0.22
 ## Title: Hekili
 ## Author: Hekili
 ## Notes: Priority helper for many DPS and tanking specializations, based on SimulationCraft action lists.
@@ -36,6 +36,7 @@ Classes\MageFrost.lua
 Classes\MonkBrewmaster.lua
 # Classes\MonkMistweaver.lua
 Classes\MonkWindwalker.lua
+# Classes\PaladinHoly.lua
 Classes\PaladinProtection.lua
 Classes\PaladinRetribution.lua
 # Classes\PriestDiscipline.lua

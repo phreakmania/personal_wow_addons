@@ -137,27 +137,26 @@ local function GuildIcon_Initialize(frame, level)
 	
 	local info = frame:CreateInfo()
 
+    -- Guilds might be on a different realm to the player. If the player has never been on that realm, then the realm won't be indexed in DataStore:GetRealms
+
 	if level == 1 then
 		local guildKey = guildBank:GetCurrentGuild()
-	
-		for account in pairs(DataStore:GetAccounts()) do
-			for realm in pairs(DataStore:GetRealms(account)) do
-				for guildName, guild in pairs(DataStore:GetGuilds(realm, account)) do
-					local text = format("%s%s / %s%s", colors.white, realm, colors.green, guildName)
-
-					if account ~= "Default" then
-						text = format("%s %s(%s)", text, colors.yellow, account)
-					end
-				
-					info.text = text
-					info.hasArrow = 1
-					info.checked = (guild == guildKey) and true or nil
-					info.value = guild		-- guild key
-					info.func = OnGuildChange
-					info.arg1 = guildBank
-					frame:AddButtonInfo(info, level)
-				end
-			end
+        
+        for _, key in pairs(DataStore:GetSavedGuildKeys()) do
+            local account, realm, guildName = strsplit(".", key)
+    		local text = format("%s%s / %s%s", colors.white, realm, colors.green, guildName)
+    
+    		if account ~= "Default" then
+    			text = format("%s %s(%s)", text, colors.yellow, account)
+    		end
+    	
+    		info.text = text
+    		info.hasArrow = 1
+    		info.checked = (key == guildKey) and true or nil
+    		info.value = key		-- guild key
+    		info.func = OnGuildChange
+    		info.arg1 = guildBank
+    		frame:AddButtonInfo(info, level)
 		end
 		
 	elseif level == 2 then

@@ -24,7 +24,7 @@
 	<Frame name="AltoholicFramePets" parent="AltoholicTabCharacters" hidden="true">
 		<Size x="615" y="306" />
 		<Anchors>
-			<Anchor point="TOPRIGHT" x="39" y="-105" />
+			<Anchor point="TOPRIGHT" x="-39" y="-105" />
 		</Anchors>
 		<Frames>
 			<Frame name="$parentNormal">
